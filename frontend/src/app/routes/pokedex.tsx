@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '@clerk/clerk-react';
 import { API_URL } from '../../lib/sprites';
-import { getFrontSprite } from '../../lib/sprites';
+import { getFrontSprite, getFrontSpriteShiny } from '../../lib/sprites';
 import type { PokemonAPI, Moveset } from '../../types';
 
 const TYPES = ['normal','fire','water','grass','electric','ice','fighting','poison','ground','flying','psychic','bug','rock','ghost','dragon','dark','steel'];
 
 export default function PokedexPage() {
+  const navigate = useNavigate();
+  const { user } = useUser();
+  const isPremium = user && (user.publicMetadata?.isPremium === true || user.unsafeMetadata?.isPremium === true);
   const [pokemonList, setPokemonList] = useState<PokemonAPI[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -13,6 +18,7 @@ export default function PokedexPage() {
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonAPI | null>(null);
   const [selectedMoveset, setSelectedMoveset] = useState<Moveset | null>(null);
   const [movesetLoading, setMovesetLoading] = useState(false);
+  const [viewShiny, setViewShiny] = useState(false);
 
   useEffect(() => {
     fetch(`${API_URL}/pokemon?limit=300`)
@@ -35,6 +41,7 @@ export default function PokedexPage() {
     setSelectedPokemon(pokemon);
     setSelectedMoveset(null);
     setMovesetLoading(true);
+    setViewShiny(false);
     try {
       const movesetRes = await fetch(`${API_URL}/movesets/${pokemon.pokedexId}`);
       if (movesetRes.ok) {
@@ -57,7 +64,14 @@ export default function PokedexPage() {
   return (
     <div className="min-h-screen bg-background font-body">
       <div className="crt-overlay" />
-      <header className="bg-surface-container-lowest border-b-3 border-black p-4">
+      <header className="bg-surface-container-lowest border-b-3 border-black p-4 flex items-center gap-4">
+        <button
+          onClick={() => navigate('/home')}
+          className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors p-2"
+          aria-label="Volver a home"
+        >
+          <span className="material-symbols-outlined">arrow_back</span>
+        </button>
         <h1 className="font-headline text-headline-lg text-primary uppercase tracking-tighter">Pokédex</h1>
       </header>
 
@@ -148,12 +162,21 @@ export default function PokedexPage() {
               {/* Sprite & Name */}
               <div className="text-center">
                 <img
-                  src={getFrontSprite(selectedPokemon.name)}
+                  src={viewShiny && isPremium ? getFrontSpriteShiny(selectedPokemon.name) : getFrontSprite(selectedPokemon.name)}
                   alt={selectedPokemon.name}
                   className="w-40 h-40 object-contain mx-auto"
                   onError={e => { (e.target as HTMLImageElement).src = selectedPokemon.spriteUrl; }}
                   style={{ imageRendering: 'pixelated' }}
                 />
+                {/* Shiny toggle - premium only */}
+                {isPremium && (
+                  <button
+                    onClick={() => setViewShiny(prev => !prev)}
+                    className="mt-2 px-3 py-1 bg-tertiary text-on-tertiary border-2 border-black font-label-sm uppercase hover:bg-tertiary-container transition-colors"
+                  >
+                    {viewShiny ? '★ SHINY ACTIVE — TAP TO NORMAL' : '★ VIEW SHINY'}
+                  </button>
+                )}
                 <div className="mt-2 px-4 py-1 bg-surface-container-lowest border-2 border-black chamfer-tl inline-block">
                   <span className="font-headline text-headline-md text-primary uppercase">{selectedPokemon.name}</span>
                 </div>

@@ -87,7 +87,7 @@ const RoomSchema = new Schema({
 export const RoomModel = model('Room', RoomSchema);
 
 const BattlePokemonSchema = new Schema({
-  pokemonId: Schema.Types.ObjectId,
+  pokemonId: Number,  // Es el pokedexId (ej: 248 para Tyranitar)
   name: String,
   types: [String],
   spriteUrl: String,
@@ -120,6 +120,7 @@ const PlayerStateSchema = new Schema({
   team: [BattlePokemonSchema],
   activePokemonIdx: { type: Number, default: 0 },
   selectedAction: Schema.Types.Mixed,
+  shinyEnabled: [{ type: Boolean, default: false }], // Array de bool por posicion en el equipo
 }, { _id: false });
 
 const BattleSchema = new Schema({

@@ -234,7 +234,7 @@ export async function resolveTurn(roomCode: string) {
 
       if (action.type === 'switch') {
         const newIdx = actor.team.findIndex(
-          (p: any, i: number) => i !== actor.activePokemonIdx && p.currentHp > 0 && String(p.pokemonId) === action.pokemonId,
+          (p: any, i: number) => i !== actor.activePokemonIdx && p.currentHp > 0 && Number(p.pokemonId) === Number(action.pokemonId),
         );
         if (newIdx !== -1) {
           clearStatus(active);
@@ -443,7 +443,7 @@ export async function buildBattlePokemon(
   }));
 
   return {
-    pokemonId: pokemonDoc._id,
+    pokemonId: pokemonDoc.pokedexId,
     name: pokemonDoc.name,
     types: pokemonDoc.types,
     spriteUrl: pokemonDoc.spriteUrl,

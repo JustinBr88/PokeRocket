@@ -247,6 +247,7 @@ export default function RoomPage() {
 
    const mySide = room?.players?.find((p: Player) => p.odiserId === playerId)?.side;
    const otherPlayer = room?.players?.find((p: Player) => p.odiserId !== playerId);
+   const hasOtherPlayer = !!otherPlayer;
    
    // Get avatar URLs for both players
    const myAvatarUrl = user?.imageUrl;
@@ -444,12 +445,17 @@ export default function RoomPage() {
             </button>
             <button
               onClick={handleReady}
+              disabled={!hasOtherPlayer}
               className={`w-full md:w-2/3 p-6 border-4 border-black chamfer-tl font-headline text-headline-lg flex items-center justify-center gap-6 group hover:scale-[1.02] active:scale-95 transition-all gloss-effect ${
-                isReady ? 'bg-surface-container text-on-surface' : 'bg-primary text-on-primary hover:bg-primary-container'
+                isReady
+                  ? 'bg-surface-container text-on-surface'
+                  : hasOtherPlayer
+                    ? 'bg-primary text-on-primary hover:bg-primary-container'
+                    : 'bg-surface-container text-on-surface-variant cursor-not-allowed opacity-60'
               }`}
             >
               <span className="material-symbols-outlined text-[32px]">swords</span>
-              {isReady ? 'CANCEL READY' : 'CONFIRM READY'}
+              {isReady ? 'CANCEL READY' : hasOtherPlayer ? 'CONFIRM READY' : 'WAITING FOR OPPONENT...'}
             </button>
           </div>
         </main>

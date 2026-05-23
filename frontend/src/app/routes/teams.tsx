@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
 import { searchPokemon } from '../../lib/poke-api';
-import { getFrontSprite, API_URL } from '../../lib/sprites';
+import { getFrontSprite, getFrontSpriteShiny, API_URL } from '../../lib/sprites';
 import { useTeamStore } from '../../stores/teamStore';
 import { useBattleSocket } from '../../lib/useBattleSocket';
+import { LEGENDARY_IDS, isLegendaryPokemon } from '../../data/legendaries';
 import type { PokemonAPI } from '../../types';
 
 export default function TeamsPage() {
@@ -15,6 +16,7 @@ export default function TeamsPage() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState('');
+  const [filterLegendary, setFilterLegendary] = useState(false);
   const [pokemonList, setPokemonList] = useState<PokemonAPI[]>([]);
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonAPI | null>(null);
   const [loading, setLoading] = useState(false);
@@ -85,17 +87,18 @@ export default function TeamsPage() {
   function handleAddToTeam(pokemon: PokemonAPI) {
     if (currentTeam.length >= 6) return;
 
-    const result = addPokemon(pokemon.pokedexId, pokemon.name, pokemon.isLegendary);
-    if (!result.success) {
-      alert(result.reason);
-      return;
-    }
+    // Usar la lista fija de legendarios en lugar del campo isLegendary de la DB
+    const isLegendary = isLegendaryPokemon(pokemon.pokedexId);
+    const result = addPokemon(pokemon.pokedexId, pokemon.name, isLegendary);
+    // Ya no muestra alert - el botón se encarga de mostrar el estado
 
-    // If showing retro and premium, enable retro for this newly added pokemon
-    if (showRetro && isPremium) {
-      toggleShiny(pokemon.pokedexId);
+    if (result.success) {
+      // If showing retro and premium, enable retro for this newly added pokemon
+      if (showRetro && isPremium) {
+        toggleShiny(pokemon.pokedexId);
+      }
+      setSelectedPokemon(null);
     }
-    setSelectedPokemon(null);
   }
 
   function handleCancelTeam() {
@@ -254,17 +257,17 @@ export default function TeamsPage() {
               flex items-center gap-2 px-4 py-2 border-3 border-black chamfer-tl font-label-lg uppercase
               transition-all hover:scale-105 active:scale-95 ml-4
               ${showRetro
-                ? 'bg-red-900/30 text-red-500 border-red-500 shadow-[0_0_12px_rgba(220,38,38,0.5)]'
-                : 'bg-transparent text-gray-500 border-gray-500'
+                ? 'bg-yellow-500 text-black border-yellow-500 shadow-[0_0_12px_rgba(234,179,8,0.6)]'
+                : 'bg-transparent text-yellow-500/60 border-yellow-500/60'
               }
             `}
-            title={showRetro ? 'Desactivar Retro' : 'Activar Retro'}
-            aria-label={showRetro ? 'Desactivar Retro' : 'Activar Retro'}
+            title={showRetro ? 'Desactivar Shiny' : 'Activar Shiny'}
+            aria-label={showRetro ? 'Desactivar Shiny' : 'Activar Shiny'}
           >
             <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
               star
             </span>
-            RETRO
+            SHINY
           </button>
         )}
         <div className="flex-1" />
@@ -310,7 +313,7 @@ export default function TeamsPage() {
                 )}
                 <div className="w-16 h-16 bg-surface flex items-center justify-center">
                   <img
-                    src={slot.shinyEnabled && isPremium ? `${API_URL}/pokemon/sprite/${slot.pokemonId}?shiny=true` : getFrontSprite(slot.pokemonName)}
+                    src={slot.shinyEnabled && isPremium ? getFrontSpriteShiny(slot.pokemonName) : getFrontSprite(slot.pokemonName)}
                     alt={slot.pokemonName}
                     className="w-full h-full object-contain"
                     onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
@@ -395,6 +398,18 @@ export default function TeamsPage() {
                   ))}
                 </select>
                 <button
+                  onClick={() => setFilterLegendary(!filterLegendary)}
+                  className={`px-4 py-2 border-3 border-black chamfer-br font-label-lg uppercase transition-all ${
+                    filterLegendary
+                      ? 'bg-yellow-500 text-black border-yellow-500'
+                      : 'bg-surface-container-lowest text-yellow-500/60 border-yellow-500/60 hover:bg-yellow-500/20'
+                  }`}
+                  title={filterLegendary ? 'Mostrar todos' : 'Filtrar solo legendarios'}
+                >
+                  <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                  LEGENDARIES
+                </button>
+                <button
                   onClick={handleSearch}
                   className="bg-primary text-on-primary px-4 py-2 hover:bg-primary-container transition-colors flex items-center gap-2 font-label-lg uppercase chamfer-br"
                 >
@@ -413,15 +428,20 @@ export default function TeamsPage() {
                   <div className="pokeball-spin" />
                 </div>
               )}
-              {pokemonList.map(pokemon => (
+              {pokemonList
+                .filter(pokemon => !filterLegendary || isLegendaryPokemon(pokemon.pokedexId))
+                .map(pokemon => {
+                  const isInTeam = currentTeam.some(t => t.pokemonId === pokemon.pokedexId);
+                  const isThisLegendary = isLegendaryPokemon(pokemon.pokedexId);
+                  return (
                 <div
                   key={pokemon._id}
                   onClick={() => handleSelectPokemon(pokemon)}
                   className={`bg-surface-container border-3 border-black p-2 hover:border-primary cursor-pointer group transition-all chamfer-tl ${
-                    currentTeam.some(t => t.pokemonId === pokemon.pokedexId) ? 'border-primary bg-surface-container-high' : ''
-                  } ${pokemon.isLegendary ? 'relative' : ''}`}
+                    isInTeam ? 'border-primary bg-surface-container-high' : ''
+                  } ${isThisLegendary ? 'relative' : ''}`}
                 >
-                  {pokemon.isLegendary && (
+                  {isThisLegendary && (
                     <div className="absolute top-1 right-1 w-6 h-6 bg-yellow-500/80 rounded-full flex items-center justify-center z-10">
                       <span className="text-xs">★</span>
                     </div>
@@ -430,7 +450,7 @@ export default function TeamsPage() {
                     <span className="text-label-sm font-label-sm text-on-surface-variant">#{String(pokemon.pokedexId).padStart(3, '0')}</span>
                   </div>
                   <img
-                    src={showRetro && isPremium ? `${API_URL}/pokemon/sprite/${pokemon.pokedexId}?shiny=true` : getFrontSprite(pokemon.name)}
+                    src={showRetro && isPremium ? getFrontSpriteShiny(pokemon.name) : getFrontSprite(pokemon.name)}
                     alt={pokemon.name}
                     className="w-full aspect-square object-contain grayscale group-hover:grayscale-0 transition-all"
                     onError={e => { (e.target as HTMLImageElement).src = pokemon.spriteUrl; }}
@@ -444,7 +464,8 @@ export default function TeamsPage() {
                     </div>
                   </div>
                 </div>
-              ))}
+              );
+            })}
             </div>
           </div>
         </main>
@@ -486,10 +507,28 @@ export default function TeamsPage() {
               {/* Add Button */}
               <button
                 onClick={() => handleAddToTeam(selectedPokemon)}
-                disabled={currentTeam.length >= 6}
-                className="w-full mt-6 bg-primary text-on-primary font-bold py-3 border-3 border-black chamfer-br hover:brightness-110 active:scale-95 transition-all uppercase font-label-lg disabled:opacity-50"
+                disabled={
+                  currentTeam.length >= 6 ||
+                  currentTeam.some(t => t.pokemonId === selectedPokemon.pokedexId) ||
+                  (isLegendaryPokemon(selectedPokemon.pokedexId) && currentTeam.some(t => t.isLegendary))
+                }
+                className={`w-full mt-6 font-bold py-3 border-3 border-black chamfer-br hover:brightness-110 active:scale-95 transition-all uppercase font-label-lg ${
+                  currentTeam.length >= 6
+                    ? 'bg-surface-container-lowest text-on-surface-variant opacity-50 cursor-not-allowed'
+                    : currentTeam.some(t => t.pokemonId === selectedPokemon.pokedexId)
+                    ? 'bg-green-900/30 text-green-400 border-green-600 cursor-not-allowed'
+                    : isLegendaryPokemon(selectedPokemon.pokedexId) && currentTeam.some(t => t.isLegendary)
+                    ? 'bg-green-900/30 text-green-400 border-green-600 cursor-not-allowed'
+                    : 'bg-primary text-on-primary hover:brightness-110'
+                }`}
               >
-                {currentTeam.length >= 6 ? 'TEAM FULL' : 'ADD TO TEAM'}
+                {currentTeam.length >= 6
+                  ? 'TEAM FULL'
+                  : currentTeam.some(t => t.pokemonId === selectedPokemon.pokedexId)
+                  ? 'EN EQUIPO'
+                  : isLegendaryPokemon(selectedPokemon.pokedexId) && currentTeam.some(t => t.isLegendary)
+                  ? 'YA TIENES UN LEGENDARIO'
+                  : 'ADD TO TEAM'}
               </button>
             </div>
           ) : (

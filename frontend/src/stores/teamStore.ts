@@ -44,7 +44,7 @@ export const useTeamStore = create<TeamState>((set, get) => ({
     }));
     return { success: true };
   },
-  removePokemon: (index) =>
+removePokemon: (index) =>
     set((s) => {
       const removed = s.currentTeam[index];
       return {

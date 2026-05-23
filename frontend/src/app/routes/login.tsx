@@ -1,8 +1,17 @@
+import { useEffect } from 'react';
 import { SignIn } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '@clerk/clerk-react';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { isSignedIn, isLoaded } = useUser();
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      navigate('/home');
+    }
+  }, [isLoaded, isSignedIn, navigate]);
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
@@ -18,12 +27,12 @@ export default function LoginPage() {
 
         {/* Clerk SignIn */}
         <div className="bg-surface-container border-[4px] border-black p-8 chamfer-both">
-          <SignIn
-            routing="path"
-            path="/login"
-            signUpUrl="/sign-up"
-            afterSignInUrl="/home"
-            appearance={{
+        <SignIn
+          routing="path"
+          path="/login"
+          signUpUrl="/sign-up"
+          afterSignInUrl="/auth/setup"
+          appearance={{
               variables: {
                 colorPrimary: '#93e569',
                 colorBackground: '#1b1c1c',

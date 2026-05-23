@@ -310,17 +310,24 @@ export default function BattlePage() {
   };
 
   // Get sprite URL considering shinyEnabled preference
-  const getActiveSpriteUrl = (pokemon: BattlePokemon, isPlayer: boolean) => {
-    const teamMember = useTeamStore.getState().currentTeam.find(p => p.pokemonId === Number(pokemon.pokemonId));
-    const isShinyEnabled = teamMember?.shinyEnabled ?? false;
-    const isPremium = user && (user.publicMetadata?.isPremium === true || user.unsafeMetadata?.isPremium === true);
+  // Shiny se muestra si está activado en el equipo, sin importar si el que ve es premium
+  // El premium solo afecta si PUEDES activar shiny (no si puedes VERLO)
+  const getActiveSpriteUrl = (pokemon: BattlePokemon, isPlayer: boolean, playerSide: 'blue' | 'red') => {
+    // Buscar el índice del Pokemon en el equipo del jugador propietario
+    const ownerPlayer = battle?.players.find(p => p.side === playerSide);
+    if (!ownerPlayer) {
+      return isPlayer ? getBackSprite(pokemon.name) : getFrontSprite(pokemon.name);
+    }
 
-    if (isShinyEnabled && isPremium) {
-      // Use Gen 5 animated shiny sprite from Showdown
+    const pokemonIdx = ownerPlayer.team.findIndex(t => Number(t.pokemonId) === Number(pokemon.pokemonId));
+    const isShinyEnabled = pokemonIdx !== -1 && ownerPlayer.shinyEnabled?.[pokemonIdx];
+
+    if (isShinyEnabled) {
+      // Usar sprite shiny animado de Gen 5 (Showdown)
       return isPlayer ? getBackSpriteShiny(pokemon.name) : getFrontSpriteShiny(pokemon.name);
     }
 
-    // Use normal sprite
+    // Sprite normal
     return isPlayer ? getBackSprite(pokemon.name) : getFrontSprite(pokemon.name);
   };
 
@@ -378,7 +385,7 @@ export default function BattlePage() {
               {/* Opponent Sprite */}
               <div className="mt-1 md:mt-2 flex justify-end relative">
                 <img
-                  src={getActiveSpriteUrl(otherActive, false)}
+                  src={getActiveSpriteUrl(otherActive, false, otherPlayer?.side ?? 'red')}
                   alt={otherActive.name}
                   className={`w-20 h-20 md:w-32 md:h-32 drop-shadow-[0_0_10px_rgba(147,229,105,0.3)] ${getSpriteClass(otherActive.name, false)} ${getSpriteStatusClass(otherActive)}`}
                   onError={e => { (e.target as HTMLImageElement).src = otherActive.spriteUrl; }}
@@ -395,7 +402,7 @@ export default function BattlePage() {
               {/* Player Sprite Back */}
               <div className="mb-1 md:mb-2 flex justify-start relative">
                 <img
-                  src={getActiveSpriteUrl(myActive, true)}
+                  src={getActiveSpriteUrl(myActive, true, myPlayer?.side ?? 'blue')}
                   alt={myActive.name}
                   className={`w-20 h-20 md:w-36 md:h-36 drop-shadow-[0_0_10px_rgba(147,229,105,0.2)] ${getSpriteClass(myActive.name, true)} ${getSpriteStatusClass(myActive)}`}
                   onError={e => { (e.target as HTMLImageElement).src = myActive.spriteUrl; }}
@@ -571,10 +578,8 @@ export default function BattlePage() {
                       {/* Sprite */}
                       <div className="w-full aspect-square flex items-center justify-center">
                         {(() => {
-                          const teamMember = useTeamStore.getState().currentTeam.find(tm => tm.pokemonId === Number(p.pokemonId));
-                          const isShinyEnabled = teamMember?.shinyEnabled ?? false;
-                          const isPremium = user && (user.publicMetadata?.isPremium === true || user.unsafeMetadata?.isPremium === true);
-                          const spriteSrc = (isShinyEnabled && isPremium) ? getFrontSpriteShiny(p.name) : getFrontSprite(p.name);
+                          const isShinyEnabled = myPlayer?.shinyEnabled?.[i] ?? false;
+                          const spriteSrc = isShinyEnabled ? getFrontSpriteShiny(p.name) : getFrontSprite(p.name);
                           return (
                             <img
                               src={spriteSrc}

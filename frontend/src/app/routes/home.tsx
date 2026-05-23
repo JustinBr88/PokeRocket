@@ -41,9 +41,9 @@ export default function HomePage() {
           PokéRocket
         </div>
         <nav className="hidden md:flex gap-6 items-center">
-          <a className="font-headline text-headline-md text-on-surface-variant hover:bg-primary hover:text-on-primary px-3 py-1 transition-colors" href="#">Battle</a>
-          <a className="font-headline text-headline-md text-on-surface-variant hover:bg-primary hover:text-on-primary px-3 py-1 transition-colors" href="#">Teams</a>
-          <a className="font-headline text-headline-md text-on-surface-variant hover:bg-primary hover:text-on-primary px-3 py-1 transition-colors" href="#">Dex</a>
+          <a className="font-headline text-headline-md text-on-surface-variant hover:bg-primary hover:text-on-primary px-3 py-1 transition-colors" href="/play">Battle</a>
+          <a className="font-headline text-headline-md text-on-surface-variant hover:bg-primary hover:text-on-primary px-3 py-1 transition-colors" href="/rules">Reglas</a>
+          <a className="font-headline text-headline-md text-on-surface-variant hover:bg-primary hover:text-on-primary px-3 py-1 transition-colors" href="/pokedex">Dex</a>
         </nav>
         <div className="flex items-center gap-4 text-primary">
           <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>signal_cellular_4_bar</span>
@@ -71,6 +71,7 @@ export default function HomePage() {
               onClick={() => {
                 if (isSignedIn) {
                   clerk.signOut();
+                  navigate('/');
                 } else {
                   navigate('/login');
                 }
@@ -177,46 +178,52 @@ export default function HomePage() {
                 </div>
               </button>
 
-              {/* Team Builder (Large Span) */}
+              {/* Pokédex (Large Span) */}
               <button
-                onClick={() => navigate('/play')}
+                onClick={() => navigate('/pokedex')}
                 className="relative group h-24 bg-surface-container-high border-4 border-black chamfer-both overflow-hidden flex flex-col justify-end p-3 gloss-effect transition-transform active:scale-95 hover:bg-surface-variant sm:col-span-2"
               >
                 <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary to-transparent" />
                 <div className="absolute top-2 right-4 opacity-10">
-                  <span className="material-symbols-outlined text-[64px]">handyman</span>
+                  <span className="material-symbols-outlined text-[64px]">menu_book</span>
                 </div>
                 <div className="relative z-10 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-3xl">construction</span>
-                  <span className="font-headline text-headline-md text-on-surface uppercase">Team Builder</span>
+                  <span className="material-symbols-outlined text-primary text-3xl">menu_book</span>
+                  <span className="font-headline text-headline-md text-on-surface uppercase">Pokédex</span>
                 </div>
               </button>
 
-              {/* My Teams */}
+              {/* My Teams (Próximamente) */}
               <button
-                onClick={() => navigate('/history')}
-                className="relative group h-24 bg-surface-container-high border-4 border-black chamfer-both overflow-hidden flex flex-col justify-end p-3 gloss-effect transition-transform active:scale-95 hover:bg-surface-variant"
+                disabled
+                className="relative group h-24 bg-surface-container-high border-4 border-black chamfer-both overflow-hidden flex flex-col justify-end p-3 gloss-effect opacity-50 grayscale cursor-not-allowed"
               >
                 <div className="absolute top-2 right-4 opacity-10">
                   <span className="material-symbols-outlined text-[48px]">groups</span>
                 </div>
-                <div className="relative z-10 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-3xl">grid_view</span>
-                  <span className="font-headline text-headline-md text-on-surface uppercase">My Teams</span>
+                <div className="relative z-10 flex flex-col items-start gap-1">
+                  <span className="font-label-sm text-[10px] text-error uppercase">PRÓXIMAMENTE</span>
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-primary text-3xl">grid_view</span>
+                    <span className="font-headline text-headline-md text-on-surface uppercase">My Teams</span>
+                  </div>
                 </div>
               </button>
 
-              {/* Leaderboards */}
+              {/* Leaderboards (Próximamente) */}
               <button
-                onClick={() => navigate('/leaderboards')}
-                className="relative group h-24 bg-surface-container-high border-4 border-black chamfer-both overflow-hidden flex flex-col justify-end p-3 gloss-effect transition-transform active:scale-95 hover:bg-surface-variant"
+                disabled
+                className="relative group h-24 bg-surface-container-high border-4 border-black chamfer-both overflow-hidden flex flex-col justify-end p-3 gloss-effect opacity-50 grayscale cursor-not-allowed"
               >
                 <div className="absolute top-2 right-4 opacity-10">
                   <span className="material-symbols-outlined text-[48px]">emoji_events</span>
                 </div>
-                <div className="relative z-10 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-3xl">leaderboard</span>
-                  <span className="font-headline text-headline-md text-on-surface uppercase">Leaderboards</span>
+                <div className="relative z-10 flex flex-col items-start gap-1">
+                  <span className="font-label-sm text-[10px] text-error uppercase">PRÓXIMAMENTE</span>
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-primary text-3xl">leaderboard</span>
+                    <span className="font-headline text-headline-md text-on-surface uppercase">Leaderboards</span>
+                  </div>
                 </div>
               </button>
             </div>

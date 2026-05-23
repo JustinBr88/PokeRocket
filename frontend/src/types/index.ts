@@ -25,6 +25,7 @@ export interface PlayerState {
   team: BattlePokemon[];
   activePokemonIdx: number;
   selectedAction: null | { type: 'move' | 'switch'; moveId?: string; pokemonId?: string };
+  shinyEnabled?: boolean[]; // Array de shiny preference por posicion del equipo
 }
 
 export interface BattlePokemon {

@@ -29,14 +29,24 @@
   - ✅ Webhook signature verification con Stripe SDK
   - ✅ Variables .env configuradas
 
-**Fase 8 ✅ — Completada:** Shiny Toggle en Pokédex (por Pokémon específico para batalla)
+**Fase 8 ✅ — Completada:** Sistema Shiny en Batalla
+  - ✅ Backend: `BattlePokemon.pokemonId` es `Number` (pokedexId, no ObjectId)
   - ✅ Backend: Team Model con campo `shinyEnabled: { type: Boolean, default: false }`
+  - ✅ Backend: `startBattle()` extrae `shinyEnabled` de cada equipo y lo guarda en `BattleModel` (array por posición)
+  - ✅ Backend: `buildBattlePokemon()` usa `pokemonDoc.pokedexId` (no `_id`)
+  - ✅ Backend: `PlayerStateSchema` tiene `shinyEnabled: [Boolean]` para persistir preferencia en batalla
   - ✅ Frontend: `toggleShiny(pokemonId)` en teamStore (Zustand)
-  - ✅ Backend: Endpoint GET `/api/pokemon/sprite/:pokedexId?shiny=true` → PNG shiny
-  - ✅ Frontend: Toggle UI en Pokédex (solo si isPremium)
-  - ✅ Teams.tsx: guarda `shinyEnabled` en payload del team
-  - ✅ Battle.tsx: carga team y restaura preferencias shiny con toggleShiny()
-  - ✅ Battle.tsx: `getActiveSpriteUrl()` muestra sprite shiny si enabled+premium
+  - ✅ Frontend: Teams.tsx — botón SHINY dorado en header (muestra/oculta según premium)
+  - ✅ Frontend: Teams.tsx — toggle shiny por Pokémon en "Current Team" (★)
+  - ✅ Frontend: Teams.tsx — botón ADD TO TEAM se bloquea con "YA TIENES UN LEGENDARIO" o "EN EQUIPO"
+  - ✅ Frontend: `getActiveSpriteUrl(pokemon, isPlayer, playerSide)` muestra shiny según preferencia guardada
+  - ✅ Frontend: Sprites shiny de Showdown Gen 5 animados (`ani-shiny/` / `ani-back-shiny/`)
+
+  **Lógica Premium para Shiny:**
+  - **Premium = puede USAR shiny:** el botón ★ aparece en Teams y pueden activar shiny en sus Pokémon
+  - **No Premium = solo puede VER shiny:** si un rival tiene premium y activó shiny, el no-premium lo ve igual
+  - El que tiene premium y activa shiny → TODOS en la batalla ven la versión shiny de ese Pokémon
+  - El que no tiene premium NO ve el botón para activar shiny, solo puede ver los de los premium
 
 **Fase 9 ✅ — Completada:** Música Premium en Batalla (random entre 3 canciones)
   - ✅ Backend: Función `selectBattleMusic(battleMode, hasAnyPremium)` en battleEngine.ts

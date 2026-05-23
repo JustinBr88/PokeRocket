@@ -96,6 +96,7 @@ function PremiumCheckout({
       if (paymentIntent.status === 'succeeded') {
         // 3. Confirmar en backend
         await confirmPaymentMutation.mutateAsync(paymentIntentId);
+        setShowSuccess(true);
         onPremiumActivated();
       } else {
         setError('Payment was not successful');
@@ -187,8 +188,20 @@ export default function PremiumPage() {
   const { user, isSignedIn, isLoaded } = useUser();
   const [isPremium, setIsPremium] = useState(false);
   const [isLoadingPremium, setIsLoadingPremium] = useState(true);
+  const [showSuccess, setShowSuccess] = useState(false);
   const stripe = getStripePromise();
 
+  // Redirect to home after 10 seconds on success
+  useEffect(() => {
+    if (showSuccess) {
+      const timer = setTimeout(() => {
+        window.location.href = '/home';
+      }, 10000);
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccess]);
+
+  // Check premium status on load
   useEffect(() => {
     if (!isLoaded) return;
 
@@ -197,12 +210,9 @@ export default function PremiumPage() {
       return;
     }
 
-    // Verificar estado premium
     const checkPremium = async () => {
       try {
-        const response = await fetch(
-          `${API_URL}/payments/check-premium/${user!.id}`
-        );
+        const response = await fetch(`${API_URL}/payments/check-premium/${user!.id}`);
         if (response.ok) {
           const data = await response.json();
           setIsPremium(data.isPremium);
@@ -304,7 +314,7 @@ export default function PremiumPage() {
           </div>
 
           {/* Stripe Elements */}
-          {!isPremium ? (
+          {!isPremium && !showSuccess && (
             <Elements stripe={stripe!}>
               <PremiumCheckout
                 userId={user!.id}
@@ -312,17 +322,30 @@ export default function PremiumPage() {
                 isPremium={isPremium}
                 onPremiumActivated={() => {
                   setIsPremium(true);
-                  setTimeout(() => navigate('/home'), 2000);
+                  setShowSuccess(true);
                 }}
               />
             </Elements>
-          ) : (
-            <PremiumCheckout
-              userId={user!.id}
-              userEmail={user!.emailAddresses?.[0]?.emailAddress || user!.id}
-              isPremium={isPremium}
-              onPremiumActivated={() => setIsPremium(true)}
-            />
+          )}
+
+          {/* Success State */}
+          {showSuccess && !isPremium && (
+            <div className="flex items-center justify-center py-8">
+              <div className="text-center animate-[slideUp_0.25s_ease-out]">
+                <span className="material-symbols-outlined text-6xl text-primary mb-4 block animate-[pulse_1s_ease-in-out_infinite]">
+                  celebration
+                </span>
+                <h3 className="font-headline text-headline-md text-primary uppercase mb-2">
+                  ¡COMPRA EXITOSA!
+                </h3>
+                <p className="font-body text-headline-sm text-on-surface uppercase mb-4">
+                  Que Pokedisfrute
+                </p>
+                <div className="font-body text-body-sm text-on-surface-variant">
+                  Redirigiendo a Home en <span className="text-primary font-bold">10</span> segundos...
+                </div>
+              </div>
+            </div>
           )}
         </div>
 

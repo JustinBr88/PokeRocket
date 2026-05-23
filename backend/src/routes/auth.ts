@@ -22,6 +22,7 @@ auth.post('/webhook', async (c: Context) => {
         const data = event.data;
         const email = (data.email_addresses as any[])?.[0]?.email_address ?? '';
         const username = data.username ?? data.first_name ?? email.split('@')[0];
+        const isPremium = data.public_metadata?.isPremium === true || data.unsafe_metadata?.isPremium === true;
         await UserModel.findOneAndUpdate(
           { odiserId: data.id },
           {
@@ -29,9 +30,13 @@ auth.post('/webhook', async (c: Context) => {
             username,
             avatarUrl: data.image_url,
             isActive: true,
+            isPremium,
           },
           { upsert: true, new: true },
         );
+        if (isPremium) {
+          console.log(`[Webhook] User ${data.id} synced with isPremium: true`);
+        }
         break;
       }
       case 'user.deleted': {
@@ -56,6 +61,39 @@ auth.get('/user/:userId', async c => {
   const user = await UserModel.findOne({ odiserId: c.req.param('userId') }).lean();
   if (!user) return c.json({ error: 'User not found' }, 404);
   return c.json(user);
+});
+
+// POST /api/auth/ensure-user — idempotent upsert (used by auth/setup page)
+// Ensures user exists in MongoDB before navigating to /home
+auth.post('/ensure-user', async c => {
+  try {
+    const { odiserId, username, avatarUrl, isPremium } = await c.req.json();
+
+    if (!odiserId) {
+      return c.json({ error: 'odiserId required' }, 400);
+    }
+
+    const user = await UserModel.findOneAndUpdate(
+      { odiserId },
+      {
+        odiserId,
+        username: username ?? 'Player',
+        avatarUrl: avatarUrl ?? '',
+        isActive: true,
+        ...(isPremium !== undefined && { isPremium }),
+      },
+      { upsert: true, new: true },
+    );
+
+    if (isPremium) {
+      console.log(`[ensure-user] User ${odiserId} set as premium`);
+    }
+
+    return c.json(user);
+  } catch (err) {
+    console.error('[ensure-user] Error:', err);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
 });
 
 export default auth;

@@ -6,7 +6,11 @@ export default function TitlePage() {
   const { isSignedIn, isLoaded } = useUser();
 
   function handleStart() {
-    navigate('/home');
+    if (isSignedIn) {
+      navigate('/auth/setup');
+    } else {
+      navigate('/sign-up');
+    }
   }
 
   return (

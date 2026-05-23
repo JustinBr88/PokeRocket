@@ -41,6 +41,7 @@ export async function startBattle(roomCode: string) {
   // Build battle teams
   // For each Pokemon in team, get the 4 famous moves from MovesetModel
   const blueBattleTeam = [];
+  const blueShinyEnabled: boolean[] = [];
   for (const p of blueTeam.pokemons) {
     const pokeDoc = await PokemonModel.findOne({ pokedexId: p.pokemonId }).lean();
     // Get moveset and filter for famous (featured) moves
@@ -50,9 +51,11 @@ export async function startBattle(roomCode: string) {
     const moveDocs = await MoveModel.find({ pokeApiId: { $in: famousMoves.map((m: any) => m.moveId) } }).lean();
     const bp = await buildBattlePokemon(pokeDoc, moveDocs, 'blue');
     blueBattleTeam.push(bp);
+    blueShinyEnabled.push(p.shinyEnabled ?? false);
   }
 
   const redBattleTeam = [];
+  const redShinyEnabled: boolean[] = [];
   for (const p of redTeam.pokemons) {
     const pokeDoc = await PokemonModel.findOne({ pokedexId: p.pokemonId }).lean();
     const moveset = await MovesetModel.findOne({ pokemonId: p.pokemonId }).lean();
@@ -60,6 +63,7 @@ export async function startBattle(roomCode: string) {
     const moveDocs = await MoveModel.find({ pokeApiId: { $in: famousMoves.map((m: any) => m.moveId) } }).lean();
     const bp = await buildBattlePokemon(pokeDoc, moveDocs, 'red');
     redBattleTeam.push(bp);
+    redShinyEnabled.push(p.shinyEnabled ?? false);
   }
 
   // Verify Premium status for both players
@@ -81,8 +85,8 @@ export async function startBattle(roomCode: string) {
     turn: 1,
     status: 'active',
     players: [
-      { odiserId: bluePlayer.odiserId, name: bluePlayer.name, side: 'blue', team: blueBattleTeam, activePokemonIdx: 0 },
-      { odiserId: redPlayer.odiserId, name: redPlayer.name, side: 'red', team: redBattleTeam, activePokemonIdx: 0 },
+      { odiserId: bluePlayer.odiserId, name: bluePlayer.name, side: 'blue', team: blueBattleTeam, activePokemonIdx: 0, shinyEnabled: blueShinyEnabled },
+      { odiserId: redPlayer.odiserId, name: redPlayer.name, side: 'red', team: redBattleTeam, activePokemonIdx: 0, shinyEnabled: redShinyEnabled },
     ],
     battleLog: ['Battle started!'],
     winnerUserId: null,
@@ -162,8 +166,15 @@ battle.post('/:roomCode/action', async c => {
       player.selectedAction = { type: 'move', moveId: String(moveIdNum) };
       player.selectedActionTurn = b.turn;
     } else if (type === 'switch') {
+      console.log(`[Battle] Switch validation for player ${playerId}:`);
+      console.log(`  activePokemonIdx=${player.activePokemonIdx}`);
+      player.team.forEach((p: any, i: number) => {
+        console.log(`  team[${i}]: pokemonId=${p.pokemonId} (${typeof p.pokemonId}), currentHp=${p.currentHp}, name=${p.name}`);
+      });
+      console.log(`  trying to switch to pokemonId=${pokemonId} (${typeof pokemonId})`);
+      const pokemonIdNum = Number(pokemonId);
       const target = player.team.find(
-        (p: any, i: number) => i !== player.activePokemonIdx && p.currentHp > 0 && String(p.pokemonId) === pokemonId,
+        (p: any, i: number) => i !== player.activePokemonIdx && p.currentHp > 0 && Number(p.pokemonId) === pokemonIdNum,
       );
       if (!target) {
         console.log(`[Battle] Invalid switch target ${pokemonId} for player ${playerId}`);

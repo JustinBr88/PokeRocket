@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import TitlePage from './app/routes/title';
 import LoginPage from './app/routes/login';
 import SignUpPage from './app/routes/sign-up';
+import AuthSetupPage from './app/routes/auth-setup';
 import HomePage from './app/routes/home';
 import PlayPage from './app/routes/play';
 import RoomPage from './app/routes/room';
@@ -20,6 +21,8 @@ export default function App() {
       <Route path="/" element={<TitlePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/sign-up" element={<SignUpPage />} />
+      <Route path="/sign-up/sso-callback" element={<SignUpPage />} />
+      <Route path="/auth/setup" element={<AuthSetupPage />} />
       <Route path="/home" element={<HomePage />} />
       <Route path="/play" element={<PlayPage />} />
       <Route path="/room/:roomId" element={<RoomPage />} />
