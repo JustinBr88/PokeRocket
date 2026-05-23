@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PokéRocket Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>.crt-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+    background-size: 100% 3px, 3px 100%;
+    pointer-events: none;
+    z-index: 999
+    }
+.hex-pattern {
+    background-color: #131313;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuB1g12FkcGjEqLvKEyLqvUB85Q60aNd0zmZ6iBRGCVoF8RIKrJbZJ7GhEEKylqV4JS5kGncipGhYtJkycF5S_rFQpop7KPeagk4Iw38FqPrNTVLFThpovkn0qab0TnYTTlIuMAX2CQGzOPtsJfrQTjNqHC1GugK9QWOUjRD58XR89MnlLqUBMW05Xr4ha4Rd-Pr5Ka-wJOtGy2HWPjETfzJIOMeMg8sSuc9YXWnGsEQ3JGodPF1uWCw51W-s-_J6F9sCGE306rb-y0);
+    background-attachment: fixed
+    }
+.bevel-cut {
+    clip-path: polygon(12px 0%, 100% 0%, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0% 100%, 0% 12px)
+    }
+.gloss-shine {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.1) 100%)
+    }</style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#930100",
+                        "tertiary-fixed-dim": "#ffb4a8",
+                        "on-surface": "#e4e2e1",
+                        "surface-container": "#1f2020",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-tint": "#89db60",
+                        "surface-variant": "#353535",
+                        "on-error": "#690005",
+                        "surface-bright": "#393939",
+                        "on-primary": "#113800",
+                        "surface-container-lowest": "#0e0e0e",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#286c00",
+                        "on-primary-fixed": "#072100",
+                        "on-tertiary-fixed": "#410000",
+                        "primary-fixed-dim": "#89db60",
+                        "primary-container": "#78c850",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary": "#690100",
+                        "on-secondary-fixed": "#001e2d",
+                        "primary-fixed": "#a4f879",
+                        "error-container": "#93000a",
+                        "on-secondary-container": "#003c55",
+                        "outline-variant": "#41493a",
+                        "outline": "#8a9481",
+                        "on-background": "#e4e2e1",
+                        "on-secondary": "#00344b",
+                        "primary": "#93e569",
+                        "surface": "#131313",
+                        "on-secondary-fixed-variant": "#004c6b",
+                        "secondary-fixed": "#c6e7ff",
+                        "surface-dim": "#131313",
+                        "on-primary-container": "#1c5100",
+                        "background": "#131313",
+                        "surface-container-low": "#1b1c1c",
+                        "on-tertiary-container": "#920100",
+                        "on-primary-fixed-variant": "#1c5200",
+                        "on-surface-variant": "#c0cab5",
+                        "inverse-surface": "#e4e2e1",
+                        "inverse-on-surface": "#303030",
+                        "surface-container-highest": "#353535",
+                        "tertiary": "#ffc1b8",
+                        "secondary": "#82cfff",
+                        "secondary-container": "#00abec",
+                        "tertiary-fixed": "#ffdad4",
+                        "tertiary-container": "#ff9989",
+                        "secondary-fixed-dim": "#82cfff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Space Mono"],
+                        "headline-lg": ["Space Mono"],
+                        "body-lg": ["JetBrains Mono"],
+                        "body-md": ["JetBrains Mono"],
+                        "label-sm": ["JetBrains Mono"],
+                        "label-lg": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-1px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "label-sm": ["10px", {"lineHeight": "1.0", "fontWeight": "700"}],
+                        "label-lg": ["12px", {"lineHeight": "1.0", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen hex-pattern overflow-hidden">
+<div class="crt-overlay"></div>
+<!-- TopAppBar -->
+<header class="bg-surface-container-lowest dark:bg-surface-container-lowest border-b-[3px] border-black bg-gradient-to-b from-surface-container-highest to-surface-container flex justify-between items-center w-full px-4 h-16 fixed top-0 z-50">
+<div class="font-headline-lg text-headline-lg text-primary tracking-tighter uppercase">
+            PokéRocket
+        </div>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="font-headline-md text-headline-md text-on-surface-variant hover:bg-primary hover:text-on-primary px-3 py-1 transition-colors" href="#">Battle</a>
+<a class="font-headline-md text-headline-md text-on-surface-variant hover:bg-primary hover:text-on-primary px-3 py-1 transition-colors" href="#">Teams</a>
+<a class="font-headline-md text-headline-md text-on-surface-variant hover:bg-primary hover:text-on-primary px-3 py-1 transition-colors" href="#">Dex</a>
+</nav>
+<div class="flex items-center gap-4 text-primary">
+<span class="material-symbols-outlined">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined">battery_charging_full</span>
+</div>
+</header>
+<!-- SideNavBar (Hidden on Mobile) -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 z-40 overflow-y-auto bg-surface-container dark:bg-surface-container border-r-[4px] border-black bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] hidden md:block">
+<div class="p-4 border-b-[3px] border-black bg-surface-container-high flex items-center gap-3">
+<div class="w-12 h-12 bg-surface-container-lowest border-[3px] border-black overflow-hidden relative">
+<img alt="Trainer" class="w-full h-full object-cover" data-alt="A pixel-art style character portrait of a young male trainer with a red cap and determined expression. The art style mimics high-fidelity 32-bit handheld gaming consoles with a limited but vibrant color palette. The character is set against a dark gray industrial background with faint glowing green scanlines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1iPQOWcnlpPXAjxyR7TBAxruJjSU5OaNt-DmvFFkkDpE4deUDQWMCt7BrHnuK07NdCtWkQn_h4RmaVmf00pb98whYFZVkE6Ncj9VXGJ_iGKn1Z0XTZrGdT7QvuYaL7FTzZL_EvRyWtbMohq_JMYY9UO__sPugsdH8ZdmOo-rWzSKC6GM6_ZY55Jx2mn2GwxDrtEM9IcOQEHS42J84fjjdWMZoSN9hfchU4JhaCyWPTBe5-tcT9zPtxiC231-ODHE7cMlTYJRkS_w"/>
+</div>
+<div>
+<div class="font-headline-md text-headline-md text-on-surface leading-none uppercase">TRAINER RED</div>
+<div class="font-body-md text-body-md text-on-surface-variant">ID: 00482</div>
+</div>
+</div>
+<nav class="flex flex-col">
+<a class="bg-primary text-on-primary border-l-[6px] border-primary-container p-4 flex items-center gap-3 active:scale-95 duration-75" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-body-md text-body-md uppercase">Home</span>
+</a>
+<a class="text-on-surface-variant p-4 flex items-center gap-3 hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-body-md text-body-md uppercase">PC Box</span>
+</a>
+<a class="text-on-surface-variant p-4 flex items-center gap-3 hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">sync_alt</span>
+<span class="font-body-md text-body-md uppercase">Trade</span>
+</a>
+<a class="text-on-surface-variant p-4 flex items-center gap-3 hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-body-md text-body-md uppercase">History</span>
+</a>
+<a class="text-on-surface-variant p-4 flex items-center gap-3 hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md uppercase">Settings</span>
+</a>
+</nav>
+<div class="p-4 mt-auto">
+<button class="w-full bg-on-tertiary-fixed-variant text-white border-[3px] border-black p-3 font-headline-md text-headline-md bevel-cut gloss-shine active:translate-y-0.5">
+                SEARCH BATTLE
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-20 pb-24 px-4 md:px-8">
+<div class="max-w-4xl mx-auto">
+<!-- Mobile Trainer Profile (Hero) -->
+<div class="md:hidden flex items-center gap-4 bg-surface-container border-[3px] border-black p-4 mb-6 bevel-cut">
+<div class="w-16 h-16 bg-surface-container-lowest border-[3px] border-black overflow-hidden">
+<img alt="Trainer" class="w-full h-full object-cover" data-alt="Close-up pixel art illustration of a trainer wearing a tactical vest and cap. The lighting is dramatic and bottom-lit, suggesting a glowing handheld device screen. The color scheme features deep blacks and vibrant radioactive greens, matching a brutalist gaming aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLC5jAU5WxjOgYLJzSxrpFPLpLf4ARDTgXviHuDFXbmM-MLJNhOuiGYNwy0ySjMy4bjQRDmoYVvZtQAyOHLEoYf-inDlnT1XgZol38VL4cBn6KIbfr1atj3TXU-GitVSLeRibcvZMVV59qTkpDp-_y5eLFRYvUm-coZwmD4fMioQOVq0NcCQi1TI9Vd-Jfyc_FXbZGCgLc_D_L6k_bO6KSZYgapspxoQISSZGe_Ksfek-RKY3xfjoaiQTH33j5cEkZHOpOgh__OiY"/>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary uppercase">TRAINER RED</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">ID: 00482 | RANK: MASTER</p>
+</div>
+</div>
+<!-- Bento Grid of DS-style Buttons -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Online Play (Primary Action) -->
+<button class="relative group h-40 bg-on-tertiary-fixed-variant border-[4px] border-black bevel-cut overflow-hidden flex flex-col justify-end p-4 gloss-shine transition-transform active:scale-95">
+<div class="absolute top-2 right-4 opacity-20">
+<span class="material-symbols-outlined text-[80px]" style="font-variation-settings: 'FILL' 1;">wifi</span>
+</div>
+<div class="relative z-10 flex items-center gap-2">
+<span class="material-symbols-outlined text-white text-3xl">public</span>
+<span class="font-headline-md text-headline-md text-white uppercase tracking-wider">Online Play</span>
+</div>
+</button>
+<!-- Battle History -->
+<button class="relative group h-40 bg-surface-container-high border-[4px] border-black bevel-cut overflow-hidden flex flex-col justify-end p-4 gloss-shine transition-transform active:scale-95 hover:bg-surface-variant">
+<div class="absolute top-2 right-4 opacity-10">
+<span class="material-symbols-outlined text-[80px]">history_edu</span>
+</div>
+<div class="relative z-10 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">equalizer</span>
+<span class="font-headline-md text-headline-md text-on-surface uppercase">Battle History</span>
+</div>
+</button>
+<!-- Team Builder (Large Span) -->
+<button class="relative group h-40 bg-surface-container-high border-[4px] border-black bevel-cut overflow-hidden flex flex-col justify-end p-4 gloss-shine transition-transform active:scale-95 hover:bg-surface-variant sm:col-span-2">
+<div class="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary to-transparent"></div>
+<div class="absolute top-2 right-4 opacity-10">
+<span class="material-symbols-outlined text-[100px]">handyman</span>
+</div>
+<div class="relative z-10 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">construction</span>
+<span class="font-headline-md text-headline-md text-on-surface uppercase">Team Builder</span>
+</div>
+</button>
+<!-- My Teams -->
+<button class="relative group h-40 bg-surface-container-high border-[4px] border-black bevel-cut overflow-hidden flex flex-col justify-end p-4 gloss-shine transition-transform active:scale-95 hover:bg-surface-variant">
+<div class="absolute top-2 right-4 opacity-10">
+<span class="material-symbols-outlined text-[80px]">groups</span>
+</div>
+<div class="relative z-10 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">grid_view</span>
+<span class="font-headline-md text-headline-md text-on-surface uppercase">My Teams</span>
+</div>
+</button>
+<!-- Leaderboards -->
+<button class="relative group h-40 bg-surface-container-high border-[4px] border-black bevel-cut overflow-hidden flex flex-col justify-end p-4 gloss-shine transition-transform active:scale-95 hover:bg-surface-variant">
+<div class="absolute top-2 right-4 opacity-10">
+<span class="material-symbols-outlined text-[80px]">emoji_events</span>
+</div>
+<div class="relative z-10 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">leaderboard</span>
+<span class="font-headline-md text-headline-md text-on-surface uppercase">Leaderboards</span>
+</div>
+</button>
+</div>
+<!-- Footer Stats Card (DS Lower Screen Aesthetic) -->
+<div class="mt-8 bg-surface-container border-[4px] border-black p-4 bevel-cut relative overflow-hidden">
+<div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#8a9481 1px, transparent 1px); background-size: 8px 8px;"></div>
+<div class="relative flex flex-col sm:flex-row justify-between items-center gap-4">
+<div class="text-center sm:text-left">
+<div class="font-label-lg text-label-lg text-primary uppercase">Current Season</div>
+<div class="font-headline-md text-headline-md text-on-surface">SEASON 05: NEO-CIAN</div>
+</div>
+<div class="flex gap-4">
+<div class="bg-surface-container-lowest border-[2px] border-black p-2 text-center w-24">
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase">WINS</div>
+<div class="font-headline-md text-headline-md text-primary">124</div>
+</div>
+<div class="bg-surface-container-lowest border-[2px] border-black p-2 text-center w-24">
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase">LOSS</div>
+<div class="font-headline-md text-on-tertiary-container">42</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Visible on Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 gap-2 bg-surface-container-highest border-t-[4px] border-black rounded-t-xl bg-[linear-gradient(180deg,rgba(255,255,255,0.1)_0%,transparent_50%)]">
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-container hover:text-on-primary-container active:scale-90 duration-100">
+<span class="material-symbols-outlined" data-icon="swords">swords</span>
+<span class="font-label-lg text-label-lg uppercase">Move List</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-container hover:text-on-primary-container active:scale-90 duration-100">
+<span class="material-symbols-outlined" data-icon="cached">cached</span>
+<span class="font-label-lg text-label-lg uppercase">Switch</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container border-[3px] border-black rounded-lg p-2 active:scale-90 duration-100">
+<span class="material-symbols-outlined" data-icon="local_mall">local_mall</span>
+<span class="font-label-lg text-label-lg uppercase">Bag</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-container hover:text-on-primary-container active:scale-90 duration-100">
+<span class="material-symbols-outlined" data-icon="directions_run">directions_run</span>
+<span class="font-label-lg text-label-lg uppercase">Run</span>
+</button>
+</nav>
+</body></html>

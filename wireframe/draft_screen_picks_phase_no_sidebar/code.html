@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #131313;
+            image-rendering: pixelated;
+            overflow-x: hidden;
+        }
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+        .diagonal-cut-tr {
+            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+        }
+        .diagonal-cut-bl {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+        }
+        .bevel-container {
+            border: 3px solid black;
+            box-shadow: inset 0 2px 0 rgba(255,255,255,0.1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#930100",
+                        "tertiary-fixed-dim": "#ffb4a8",
+                        "on-surface": "#e4e2e1",
+                        "surface-container": "#1f2020",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-tint": "#89db60",
+                        "surface-variant": "#353535",
+                        "on-error": "#690005",
+                        "surface-bright": "#393939",
+                        "on-primary": "#113800",
+                        "surface-container-lowest": "#0e0e0e",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#286c00",
+                        "on-primary-fixed": "#072100",
+                        "on-tertiary-fixed": "#410000",
+                        "primary-fixed-dim": "#89db60",
+                        "primary-container": "#78c850",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary": "#690100",
+                        "on-secondary-fixed": "#001e2d",
+                        "primary-fixed": "#a4f879",
+                        "error-container": "#93000a",
+                        "on-secondary-container": "#003c55",
+                        "outline-variant": "#41493a",
+                        "outline": "#8a9481",
+                        "on-background": "#e4e2e1",
+                        "on-secondary": "#00344b",
+                        "primary": "#93e569",
+                        "surface": "#131313",
+                        "on-secondary-fixed-variant": "#004c6b",
+                        "secondary-fixed": "#c6e7ff",
+                        "surface-dim": "#131313",
+                        "on-primary-container": "#1c5100",
+                        "background": "#131313",
+                        "surface-container-low": "#1b1c1c",
+                        "on-tertiary-container": "#920100",
+                        "on-primary-fixed-variant": "#1c5200",
+                        "on-surface-variant": "#c0cab5",
+                        "inverse-surface": "#e4e2e1",
+                        "inverse-on-surface": "#303030",
+                        "surface-container-highest": "#353535",
+                        "tertiary": "#ffc1b8",
+                        "secondary": "#82cfff",
+                        "secondary-container": "#00abec",
+                        "tertiary-fixed": "#ffdad4",
+                        "tertiary-container": "#ff9989",
+                        "secondary-fixed-dim": "#82cfff"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Space Mono"],
+                        "headline-lg": ["Space Mono"],
+                        "body-lg": ["JetBrains Mono"],
+                        "body-md": ["JetBrains Mono"],
+                        "label-sm": ["JetBrains Mono"],
+                        "label-lg": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-1px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "label-sm": ["10px", {"lineHeight": "1.0", "fontWeight": "700"}],
+                        "label-lg": ["12px", {"lineHeight": "1.0", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface">
+<div class="crt-overlay"></div>
+<!-- Top Navigation Shell -->
+<header class="flex justify-between items-center w-full px-4 h-16 bg-surface-container-lowest dark:bg-surface-container-lowest border-b-[3px] border-black bg-gradient-to-b from-surface-container-highest to-surface-container fixed top-0 z-50">
+<div class="font-headline-lg text-headline-lg text-primary tracking-tighter uppercase">PokéRocket</div>
+<nav class="hidden md:flex gap-8">
+<a class="font-headline-md text-headline-md text-on-surface-variant hover:bg-primary hover:text-on-primary px-2 transition-colors" href="#">Battle</a>
+<a class="font-headline-md text-headline-md text-primary font-bold border-b-2 border-primary pb-1" href="#">Teams</a>
+<a class="font-headline-md text-headline-md text-on-surface-variant hover:bg-primary hover:text-on-primary px-2 transition-colors" href="#">Dex</a>
+</nav>
+<div class="flex items-center gap-4 text-primary">
+<span class="material-symbols-outlined">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined">battery_charging_full</span>
+</div>
+</header>
+<!-- Side Navigation Shell -->
+<!-- Main Content Canvas -->
+<main class="pt-16 min-h-screen">
+<div class="p-gutter lg:p-margin-desktop space-y-gutter">
+<!-- Draft Header & Timer -->
+<section class="flex flex-col md:flex-row gap-gutter items-stretch">
+<div class="flex-1 bg-surface-container-high border-[3px] border-black diagonal-cut-tr p-4 flex items-center justify-between">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary">DRAFT PHASE</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">TOURNAMENT FINALS: REGION 5</p>
+</div>
+<div class="bg-error-container border-2 border-black px-6 py-2 flex flex-col items-center">
+<span class="font-label-lg text-label-lg text-on-error-container uppercase">Remaining Time</span>
+<span class="font-headline-lg text-headline-lg text-error">00:45</span>
+</div>
+</div>
+</section>
+<!-- Draft Board Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Player 1 Picks (Left) -->
+<aside class="col-span-12 lg:col-span-2 space-y-4">
+<div class="bg-on-secondary-container p-2 border-[3px] border-black text-center font-headline-md text-headline-md text-on-primary">BLUE TEAM</div>
+<div class="space-y-2">
+<!-- Pick Slot 1 -->
+<div class="bg-surface-container border-[3px] border-black h-24 flex items-center gap-2 p-2 relative overflow-hidden group">
+<div class="w-16 h-16 bg-surface-variant border-2 border-black flex items-center justify-center shrink-0">
+<img alt="Charizard" class="w-full h-full object-contain" data-alt="A pixel-art sprite of Charizard from Pokémon Black and White version. The style is classic Gen 5, featuring bold outlines and vibrant orange colors against a dark, industrial UI background with mechanical accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEELglDthxN-ovpTy3rsfPMnyLyXCH5nPF4qsosaohItXKvdnbW9B4vdu8PQsRdN3vaSJQIcrcFzyxcyyZPgpB265RedP2KeWUp83f9lmDWKmOMxaY3Z8560yMbd3a9GBLhPASzt6k974qPk_9635GxkpIlQpLuSVjEVYcxlYEOB4QA6_inJfpD95WB0NJj1MRawCKbp_3R5UqCDf4Clo58EG_ABPpdeGkVmUQmk60hcLtL6SjUQEqZS1jVMVH2injoj11VjGVMb8"/>
+</div>
+<div class="font-label-lg text-label-lg uppercase">CHARIZARD</div>
+<div class="absolute right-0 bottom-0 px-2 bg-black text-primary font-label-sm text-label-sm">PICK 1</div>
+</div>
+<!-- Pick Slot 2 -->
+<div class="bg-surface-container border-[3px] border-black h-24 flex items-center gap-2 p-2 relative overflow-hidden">
+<div class="w-16 h-16 bg-surface-variant border-2 border-black flex items-center justify-center shrink-0">
+<img alt="Dragonite" class="w-full h-full object-contain" data-alt="A pixel-art sprite of Dragonite from Pokémon Black and White version. The style is classic Gen 5, featuring bold outlines and vibrant orange colors against a dark, industrial UI background with mechanical accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJdUexIkVOf8iL7gLoi4j2l3dNt96v5h7_qUE_UWudt7FBrxtZzOgkMxdZHNSTTz7dGR20TZO6bEmdvwtEXDUArqfD4APTJnFkdkviuEkKs0IISIi8KtuCQaQ4oh1Ub9IKiwDljPKnQRQ8cuK6QoKQg9H8l-7LE0XqPb4uFFxU845DO46onkN8R1h8kT2FMdqIe8nX2Dh5UMd-P-uOTrWyAe1gvRpDFc1Epm1tXNaRD2IEHteUyKWwuHB7WmgS3JV0xjHmJE0-oro"/>
+</div>
+<div class="font-label-lg text-label-lg uppercase">DRAGONITE</div>
+<div class="absolute right-0 bottom-0 px-2 bg-black text-primary font-label-sm text-label-sm">PICK 3</div>
+</div>
+<!-- Empty Slots -->
+<div class="bg-surface-container/50 border-[3px] border-black border-dashed h-24 flex items-center justify-center">
+<span class="material-symbols-outlined text-surface-variant">add_box</span>
+</div>
+<div class="bg-surface-container/50 border-[3px] border-black border-dashed h-24 flex items-center justify-center">
+<span class="material-symbols-outlined text-surface-variant">add_box</span>
+</div>
+</div>
+</aside>
+<!-- Central Selection Area -->
+<section class="col-span-12 lg:col-span-8 space-y-gutter">
+<div class="bg-surface-container-high border-[3px] border-black p-4 relative">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-md text-headline-md text-on-surface">CHOOSE YOUR POKÉMON</h3>
+<div class="flex gap-2">
+<div class="bg-surface-variant border-[3px] border-black px-4 py-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-label-lg">search</span>
+<input class="bg-transparent border-none focus:ring-0 font-label-lg text-label-lg w-32 p-0 text-on-surface uppercase" placeholder="FILTER..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Poke Grid -->
+<div class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-2 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
+<!-- Selected Card -->
+<div class="bg-primary border-[3px] border-black p-1 aspect-square flex flex-col items-center justify-center cursor-pointer transition-transform hover:-translate-y-1 active:scale-95 group">
+<img alt="Lapras" class="w-12 h-12" data-alt="A pixel-art sprite of Lapras from Pokémon Black and White version. The style is classic Gen 5, featuring bold outlines and soft blue colors against a vibrant green primary-accented UI card." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtqeab5-oHqYL5RDBa1e_p6gRA1di2m_dvS6o6eWESGqBs9p6WicIZiyxqfTz3RTakeryboS7a8PLAQTCW-ZKtkpaE7H4tfBwjWqW7eEYuQWsy5prnZguuuDPjfcsCNbXJOr_KIunhNi_PaRtVsvjC3idqIDKtSnlNQGpDvqvgKPIf7o-f0u8o9bAF6r6jZa-971IzcXf6TG8RPNfMt51L1bnrORNSb2OUuOLA1KXABMbBhsbPJXCqdksGF2An9_lHnDCN1RLJQE8"/>
+<span class="font-label-sm text-label-sm text-on-primary">LAPRAS</span>
+</div>
+<!-- Standard Cards -->
+<div class="bg-surface-container border-[3px] border-black p-1 aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-surface-variant transition-all">
+<img alt="Abra" class="w-12 h-12" data-alt="A pixel-art sprite of Abra from Pokémon Black and White version. The style is classic Gen 5, featuring bold outlines and muted yellow colors against a dark gray industrial container UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuALcQhg7AKncV0XxnKcIVSgsK9CtHrhfKGWWTIugm_Mj_GBGxGKm7KqziwtwdsrNywWfdqjLLiT75iLt2rJV0OpQxfhiBGXBapeMz1QDYk8fX2tZyFHeUk3BSz041Jt0pweoYr6bKUHb8NqaLqpbkExum2rM_8eVFgUA4vyYF_WGjc-dmcO1pCZ6d9NjkBDE5DtE64Tsii5Qdl8p9GPNaEG7hnD8FrHcuSKyQa0eYa0Ha4uxb67ozQfWVVAHUPEYuaPvSlOlFfn1xA"/>
+<span class="font-label-sm text-label-sm text-on-surface-variant">ABRA</span>
+</div>
+<!-- Repeat for density -->
+<div class="bg-surface-container border-[3px] border-black p-1 aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-surface-variant">
+<img alt="Snorlax" class="w-12 h-12" data-alt="A pixel-art sprite of Snorlax from Pokémon Black and White version. The style is classic Gen 5, featuring bold outlines and dark navy colors against a dark gray industrial container UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBj4bh6kvHliehMV8Nv7uMamXn6yxlg-2Tv_h1Oh1iN25LLeHsUa7CymxXUBTeMiwADSWgwx333XDeB5Mmy61t562yEyVljpXEBDMo6LzUS480Z_70WYBMkYMtQUGjnRF1-LjSuZxFVPKhRX4I81vS3DCBK7Y-febaNAHCwJc8vesUXiJGxwWPX9MCgT9LEBFnWO6ymwnb64VL-teDuKhd6S-kh8UgsxhXkDU5G-oL71fsNz9wMDvCUgqaTYxLU0AH8EC9bKgKevBc"/>
+<span class="font-label-sm text-label-sm text-on-surface-variant">SNORLAX</span>
+</div>
+<div class="bg-surface-container border-[3px] border-black p-1 aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-surface-variant">
+<img alt="Gengar" class="w-12 h-12" data-alt="A pixel-art sprite of Gengar from Pokémon Black and White version. The style is classic Gen 5, featuring bold outlines and deep purple colors against a dark gray industrial container UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAcugw9KHuKfxRyoB7CofrivJ1uWpiAiAQFxku3nJg5LAhVnM4HVSD5mrQ82XUojAhIJuETpKrgdqaJRW2lYKaZXrOLi0jfzUrgSFOribN1I7BcastS7kOAdtL-7ozhrpyULu0JBf1l2W95oagyLiG6VgkNmr2MFlT4yE8pkWUsxT_v-OnAKYbe7L1n5_qVasbW64lc1ZbqPzZmV7Tj_sVrIcS6-z_P5XzQloMlrGXdcwyoIeiGZuJhkbyKye9Uk6Kee_mldGMGQo"/>
+<span class="font-label-sm text-label-sm text-on-surface-variant">GENGAR</span>
+</div>
+<div class="bg-surface-container border-[3px] border-black p-1 aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-surface-variant">
+<img alt="Mewtwo" class="w-12 h-12" data-alt="A pixel-art sprite of Mewtwo from Pokémon Black and White version. The style is classic Gen 5, featuring bold outlines and pale purple colors against a dark gray industrial container UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuAcRcMuEC8OYQW7ZJmmOic9eBE40wGjud1s24NsyB5bxLp_ApNtr1GqAZE01ie9AaKAsoSUaUjTol1APP3G6MHQ4B-B7g5TztnqsfRK59s7SeIgjaBmf37rGUtAut8a3lGK-AnIFLDq9OS0Xo_Cni3_PyGPi7ttPo9z5OQetYnY8MiqsQ1_oGs70ohB6Q2ZkXiVnECe_QuXximIE2vxbETH_-s3boRn1pg8aGwmiY_aoBX1c4fCnX8yiOT8x8rSSDrZMT9Z2jRf0"/>
+<span class="font-label-sm text-label-sm text-on-surface-variant">MEWTWO</span>
+</div>
+<!-- Generating filler cards for the visual -->
+<div class="bg-surface-container border-[3px] border-black p-1 aspect-square flex flex-col items-center justify-center opacity-50"><span class="font-label-sm text-label-sm">??</span></div>
+<div class="bg-surface-container border-[3px] border-black p-1 aspect-square flex flex-col items-center justify-center opacity-50"><span class="font-label-sm text-label-sm">??</span></div>
+<div class="bg-surface-container border-[3px] border-black p-1 aspect-square flex flex-col items-center justify-center opacity-50"><span class="font-label-sm text-label-sm">??</span></div>
+<div class="bg-surface-container border-[3px] border-black p-1 aspect-square flex flex-col items-center justify-center opacity-50"><span class="font-label-sm text-label-sm">??</span></div>
+<div class="bg-surface-container border-[3px] border-black p-1 aspect-square flex flex-col items-center justify-center opacity-50"><span class="font-label-sm text-label-sm">??</span></div>
+<div class="bg-surface-container border-[3px] border-black p-1 aspect-square flex flex-col items-center justify-center opacity-50"><span class="font-label-sm text-label-sm">??</span></div>
+<div class="bg-surface-container border-[3px] border-black p-1 aspect-square flex flex-col items-center justify-center opacity-50"><span class="font-label-sm text-label-sm">??</span></div>
+</div>
+<div class="mt-6 flex flex-col md:flex-row gap-4 items-center bg-surface-container border-[3px] border-black p-4 diagonal-cut-bl">
+<div class="w-32 h-32 bg-surface-container-highest border-[3px] border-black flex items-center justify-center shrink-0">
+<img alt="Lapras Large" class="w-24 h-24" data-alt="A high-fidelity pixel-art sprite of Lapras, showcasing intricate detailing typical of the DS era. The creature is rendered with soft blues and neutral whites, set against a dark textured background of a technical interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdqG2FnaK_VCFbQnj9V3W9siKm8q7FPhOlJUY4lLXNKGqpGxG1CRXiaU5qUFv26J8BtMo9uN5aO3BmheqpLOBOMlSV3poJy2-ETgi5k3YhR1WmqJjlxNdSlqKbzaqvBpTuzIQqfjNEgWyDP0tSA3age7x_kDF41O51BJbeXjzVXrcv949h64quzllJr4mOQQwEwKFGzS0ikriuiyLsp5Gd6Hg0VDdhpjmo7jDfs5KKfvbZ5xNaXXoHHy9PD2ERb8Xq1Sz4DLRDFGk"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-1">
+<h4 class="font-headline-lg text-headline-lg text-secondary">LAPRAS</h4>
+<div class="flex gap-1">
+<span class="bg-[#4A90E2] px-2 py-0.5 font-label-sm text-label-sm text-white border border-black">WATER</span>
+<span class="bg-[#63C5DA] px-2 py-0.5 font-label-sm text-label-sm text-white border border-black">ICE</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md">A gentle soul that can read the minds of people. It can ferry people across the sea on its back.</p>
+</div>
+<button class="bg-primary text-on-primary px-10 py-4 font-headline-md text-headline-md border-[3px] border-black hover:bg-primary-container transition-all active:scale-90">
+                                LOCK PICK
+                            </button>
+</div>
+</div>
+</section>
+<!-- Player 2 Picks & Order (Right) -->
+<aside class="col-span-12 lg:col-span-2 space-y-4">
+<div class="bg-on-tertiary-container p-2 border-[3px] border-black text-center font-headline-md text-headline-md text-white">RED TEAM</div>
+<div class="space-y-2">
+<!-- Pick Slot 1 -->
+<div class="bg-surface-container border-[3px] border-black h-24 flex items-center gap-2 p-2 relative overflow-hidden group">
+<div class="w-16 h-16 bg-surface-variant border-2 border-black flex items-center justify-center shrink-0">
+<img alt="Mewtwo" class="w-full h-full object-contain" data-alt="A pixel-art sprite of Mewtwo from Pokémon Black and White version. The style is classic Gen 5, featuring bold outlines and pale purple colors against a dark, industrial UI background with mechanical accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9w2KB6U3_PL2DA-WaRX4A9WfoOXD0AzVRg-zOmmZdNgJBE-1ljiUfhWv_uw6vwFubkCAC9OBW4NWbJUWYKLlncrhRLR6-7vAAPkai4UpZfNggmKgu8IgSJ3sYwmz25q73Z4rDTWAcpBPzI2zJL5TV56OkcVngUaF_O19xPBAEONjnfwro0eYDQ-702iqtu8qeM7R9fjeMe8viwLTtqW4GmT-HH1ks0EcemT5HJQB7h9xJ1W5dT88Ix4Dz0K8mwogaImvVv9dPtls"/>
+</div>
+<div class="font-label-lg text-label-lg uppercase">MEWTWO</div>
+<div class="absolute right-0 bottom-0 px-2 bg-black text-secondary font-label-sm text-label-sm">PICK 2</div>
+</div>
+<!-- Order Tracking -->
+<div class="mt-8 border-[3px] border-black p-3 bg-surface-container-high">
+<h4 class="font-label-lg text-label-lg text-primary mb-2 uppercase">NEXT PICK</h4>
+<div class="space-y-2">
+<div class="flex items-center gap-2 p-2 bg-primary text-on-primary border-[3px] border-black">
+<span class="material-symbols-outlined text-sm">arrow_right</span>
+<span class="font-label-lg text-label-lg uppercase">PICK 4: BLUE TEAM</span>
+</div>
+<div class="flex items-center gap-2 p-2 bg-surface-container border-[3px] border-black opacity-50">
+<span class="font-label-lg text-label-lg uppercase">PICK 5: RED TEAM</span>
+</div>
+<div class="flex items-center gap-2 p-2 bg-surface-container border-[3px] border-black opacity-50">
+<span class="font-label-lg text-label-lg uppercase">PICK 6: BLUE TEAM</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 gap-2 border-t-[4px] border-black bg-surface-container-highest bg-[linear-gradient(180deg,rgba(255,255,255,0.1)_0%,transparent_50%)]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined">swords</span>
+<span class="font-label-lg text-label-lg uppercase">Move List</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container border-[3px] border-black rounded-lg p-2 active:scale-90 duration-100">
+<span class="material-symbols-outlined">cached</span>
+<span class="font-label-lg text-label-lg uppercase">Switch</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">local_mall</span>
+<span class="font-label-lg text-label-lg uppercase">Bag</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">directions_run</span>
+<span class="font-label-lg text-label-lg uppercase">Run</span>
+</div>
+</nav>
+</body></html>

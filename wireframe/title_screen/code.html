@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PokéRocket - Title Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .scanline-overlay {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+        .chamfer-br {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+        }
+        .chamfer-tl {
+            clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%, 0 20px);
+        }
+        .metallic-text {
+            background: linear-gradient(to bottom, #e4e2e1 0%, #8a9481 45%, #131313 50%, #41493a 55%, #e4e2e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(4px 4px 0px #000);
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#930100",
+                    "tertiary-fixed-dim": "#ffb4a8",
+                    "on-surface": "#e4e2e1",
+                    "surface-container": "#1f2020",
+                    "surface-container-high": "#2a2a2a",
+                    "surface-tint": "#89db60",
+                    "surface-variant": "#353535",
+                    "on-error": "#690005",
+                    "surface-bright": "#393939",
+                    "on-primary": "#113800",
+                    "surface-container-lowest": "#0e0e0e",
+                    "error": "#ffb4ab",
+                    "inverse-primary": "#286c00",
+                    "on-primary-fixed": "#072100",
+                    "on-tertiary-fixed": "#410000",
+                    "primary-fixed-dim": "#89db60",
+                    "primary-container": "#78c850",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary": "#690100",
+                    "on-secondary-fixed": "#001e2d",
+                    "primary-fixed": "#a4f879",
+                    "error-container": "#93000a",
+                    "on-secondary-container": "#003c55",
+                    "outline-variant": "#41493a",
+                    "outline": "#8a9481",
+                    "on-background": "#e4e2e1",
+                    "on-secondary": "#00344b",
+                    "primary": "#93e569",
+                    "surface": "#131313",
+                    "on-secondary-fixed-variant": "#004c6b",
+                    "secondary-fixed": "#c6e7ff",
+                    "surface-dim": "#131313",
+                    "on-primary-container": "#1c5100",
+                    "background": "#131313",
+                    "surface-container-low": "#1b1c1c",
+                    "on-tertiary-container": "#920100",
+                    "on-primary-fixed-variant": "#1c5200",
+                    "on-surface-variant": "#c0cab5",
+                    "inverse-surface": "#e4e2e1",
+                    "inverse-on-surface": "#303030",
+                    "surface-container-highest": "#353535",
+                    "tertiary": "#ffc1b8",
+                    "secondary": "#82cfff",
+                    "secondary-container": "#00abec",
+                    "tertiary-fixed": "#ffdad4",
+                    "tertiary-container": "#ff9989",
+                    "secondary-fixed-dim": "#82cfff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "gutter": "16px",
+                    "margin-desktop": "32px",
+                    "margin-mobile": "12px",
+                    "border-width": "3px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Space Mono"],
+                    "headline-lg": ["Space Mono"],
+                    "body-lg": ["JetBrains Mono"],
+                    "body-md": ["JetBrains Mono"],
+                    "label-sm": ["JetBrains Mono"],
+                    "label-lg": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-1px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "label-sm": ["10px", {"lineHeight": "1.0", "fontWeight": "700"}],
+                    "label-lg": ["12px", {"lineHeight": "1.0", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md overflow-hidden selection:bg-primary selection:text-on-primary">
+<div class="fixed inset-0 scanline-overlay z-[100]"></div>
+<div class="relative w-full h-screen flex flex-col items-center justify-center bg-surface-container-lowest border-[12px] border-black">
+<div class="absolute inset-0 flex items-center justify-between px-12 pointer-events-none opacity-40">
+<div class="h-full w-1/3 relative">
+<img alt="" class="h-full w-full object-contain object-left scale-110" data-alt="A high-contrast black silhouette of the legendary dragon Reshiram against a dark, moody grey industrial background. The style is minimalist and energetic, reminiscent of Gen 5 portable gaming box art. Sharp edges, dramatic lighting from below, and technical carbon-fibre textures dominate the composition, creating an epic and powerful atmosphere with a dark-mode palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsuiIMXX9TLxuAikd7mKV5ZiDXcA44ur68FbBcE7a97tc9ZHfxmHI6Y_sVYTTzh-UB1kcH3vIaIPF1r5zwIPyVHTKHMuJOpQ3KN558BasXcmDx4BVDEbwh6i498yuC0YxSTtGNYhbHziljmaqjXO532hY28C65FtiKR3bBhZVTSsh4s9nCYQut8BXLAjNB9NqcXvy9Cz60mTiXDX4z5e6kSkuLsHb4z9pvLH2ZUItqpvBi8zlfmFHmrGpUOBzFRHzv5v0YXBwfumI"/>
+</div>
+<div class="h-full w-1/3 relative">
+<img alt="" class="h-full w-full object-contain object-right scale-110" data-alt="A high-contrast black silhouette of the legendary dragon Zekrom against a dark, moody grey industrial background. The style is gritty and mechanical, with sharp angles and faceted edges inspired by portable gaming screens. Blue electrical sparks subtly glow around the silhouette. The overall aesthetic is industrial, technical, and high-density, consistent with a dark, epic urban evolution theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcMYj5FVFaz4UsAe6i78LCM3H-JLdEYDCTicdfGQDFGN6BIScxp5BIutgbi3El7bENZVcySFqIIRAYfvVuYJQyj8R9EiQpcgrNeFRftkx9clldwCGM23n38X93SMnNW2wlg_X8XwBwckiwBoDuBtfx_nYvIOfnmSkjknO6rcPqXh0ZNm3IEOxQc7Sd8dQ8iZMEe5mc886kDm7NvdvPFXa5dC6VvkxLY8SDGzjKfq8SeuUXM_fRZioQhNr0xqezep-Gi2HwqXo3A3Q"/>
+</div>
+</div>
+<div class="absolute top-0 left-0 w-full p-4 flex justify-between items-center z-50">
+<div class="flex items-center gap-2 bg-black px-4 py-2 chamfer-br border-b-[3px] border-r-[3px] border-outline">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">signal_cellular_4_bar</span>
+<span class="font-headline-md text-headline-md text-primary tracking-tighter uppercase">PokéRocket</span>
+</div>
+<div class="flex items-center gap-4 bg-black px-4 py-2 chamfer-tl border-t-[3px] border-l-[3px] border-outline">
+<span class="font-label-lg text-label-lg text-on-surface-variant">V 1.0.5 // SYSTEM_ACTIVE</span>
+<span class="material-symbols-outlined text-on-surface-variant" style="font-variation-settings: 'FILL' 1;">battery_charging_full</span>
+</div>
+</div>
+<div class="relative z-10 flex flex-col items-center">
+<div class="mb-8">
+<h1 class="font-headline-lg text-[80px] metallic-text uppercase tracking-tighter leading-none text-center">
+                    PokéRocket
+                </h1>
+<div class="w-full h-1 bg-primary mt-2 shadow-[0_0_15px_rgba(147,229,105,0.8)]"></div>
+</div>
+<div class="flex flex-col items-center gap-12 mt-12">
+<button class="group relative px-12 py-6 bg-surface-container-high border-[4px] border-black chamfer-tl transition-all hover:translate-y-0.5 active:scale-95">
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity"></div>
+<span class="relative font-headline-md text-headline-md text-on-surface tracking-widest animate-pulse">
+                        CLICK TO START
+                    </span>
+<div class="absolute -top-1 -left-1 w-4 h-4 border-t-4 border-l-4 border-primary"></div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 border-b-4 border-r-4 border-primary"></div>
+</button>
+<div class="flex gap-4">
+<div class="bg-surface-variant border-[2px] border-black px-3 py-1 flex items-center gap-2">
+<span class="w-2 h-2 bg-primary rounded-full animate-ping"></span>
+<span class="font-label-sm text-label-sm text-on-surface uppercase">Server: Unova_West</span>
+</div>
+<div class="bg-surface-variant border-[2px] border-black px-3 py-1 flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-on-surface uppercase">Region: Global</span>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-8 left-1/2 -translate-x-1/2 w-full max-w-4xl px-8 flex justify-between items-end">
+<div class="flex flex-col gap-2">
+<div class="bg-black/60 backdrop-blur-sm border-l-[6px] border-primary p-4 w-64">
+<p class="font-label-lg text-label-lg text-primary mb-1">TRAINER DATA</p>
+<p class="font-body-md text-body-md text-on-surface">LINKED: TRAINER RED</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-[12px]">00482-PKRK-9921</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container border-[3px] border-black p-4 flex flex-col items-center justify-center hover:bg-primary group transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary mb-1">settings</span>
+<span class="font-label-sm text-label-sm group-hover:text-on-primary">CONFIG</span>
+</div>
+<div class="bg-surface-container border-[3px] border-black p-4 flex flex-col items-center justify-center hover:bg-primary group transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary mb-1">history</span>
+<span class="font-label-sm text-label-sm group-hover:text-on-primary">LOGS</span>
+</div>
+</div>
+</div>
+<div class="fixed bottom-0 left-0 w-full h-12 bg-surface-container-highest border-t-[4px] border-black flex items-center px-6 overflow-hidden">
+<div class="flex gap-8 animate-[scroll_20s_linear_infinite] whitespace-nowrap">
+<span class="font-label-lg text-label-lg text-on-surface-variant">NEW BATTLE SIMULATION AVAILABLE: CHALLENGE ELITE FOUR</span>
+<span class="font-label-lg text-label-lg text-primary">•</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant">TRADE MARKET UPDATE: SHINY GENESECT DETECTED IN SECTOR 7</span>
+<span class="font-label-lg text-label-lg text-primary">•</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant">SYSTEM CALIBRATION COMPLETE: RESHIRAM ENGINE AT 100%</span>
+<span class="font-label-lg text-label-lg text-primary">•</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant">NEW BATTLE SIMULATION AVAILABLE: CHALLENGE ELITE FOUR</span>
+</div>
+</div>
+</div>
+<style>
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+    </style>
+</body></html>

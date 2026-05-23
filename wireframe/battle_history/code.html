@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #131313;
+            background-image: radial-gradient(#353535 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+        .chamfer-card {
+            clip-path: polygon(0 12px, 12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+        }
+        .chamfer-button {
+            clip-path: polygon(0 8px, 8px 0, 100% 0, 100% 100%, 0 100%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#930100",
+                    "tertiary-fixed-dim": "#ffb4a8",
+                    "on-surface": "#e4e2e1",
+                    "surface-container": "#1f2020",
+                    "surface-container-high": "#2a2a2a",
+                    "surface-tint": "#89db60",
+                    "surface-variant": "#353535",
+                    "on-error": "#690005",
+                    "surface-bright": "#393939",
+                    "on-primary": "#113800",
+                    "surface-container-lowest": "#0e0e0e",
+                    "error": "#ffb4ab",
+                    "inverse-primary": "#286c00",
+                    "on-primary-fixed": "#072100",
+                    "on-tertiary-fixed": "#410000",
+                    "primary-fixed-dim": "#89db60",
+                    "primary-container": "#78c850",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary": "#690100",
+                    "on-secondary-fixed": "#001e2d",
+                    "primary-fixed": "#a4f879",
+                    "error-container": "#93000a",
+                    "on-secondary-container": "#003c55",
+                    "outline-variant": "#41493a",
+                    "outline": "#8a9481",
+                    "on-background": "#e4e2e1",
+                    "on-secondary": "#00344b",
+                    "primary": "#93e569",
+                    "surface": "#131313",
+                    "on-secondary-fixed-variant": "#004c6b",
+                    "secondary-fixed": "#c6e7ff",
+                    "surface-dim": "#131313",
+                    "on-primary-container": "#1c5100",
+                    "background": "#131313",
+                    "surface-container-low": "#1b1c1c",
+                    "on-tertiary-container": "#920100",
+                    "on-primary-fixed-variant": "#1c5200",
+                    "on-surface-variant": "#c0cab5",
+                    "inverse-surface": "#e4e2e1",
+                    "inverse-on-surface": "#303030",
+                    "surface-container-highest": "#353535",
+                    "tertiary": "#ffc1b8",
+                    "secondary": "#82cfff",
+                    "secondary-container": "#00abec",
+                    "tertiary-fixed": "#ffdad4",
+                    "tertiary-container": "#ff9989",
+                    "secondary-fixed-dim": "#82cfff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "gutter": "16px",
+                    "margin-desktop": "32px",
+                    "margin-mobile": "12px",
+                    "border-width": "3px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Space Mono"],
+                    "headline-lg": ["Space Mono"],
+                    "body-lg": ["JetBrains Mono"],
+                    "body-md": ["JetBrains Mono"],
+                    "label-sm": ["JetBrains Mono"],
+                    "label-lg": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-1px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "label-sm": ["10px", {"lineHeight": "1.0", "fontWeight": "700"}],
+                    "label-lg": ["12px", {"lineHeight": "1.0", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md selection:bg-primary selection:text-on-primary">
+<div class="crt-overlay"></div>
+<!-- TopAppBar -->
+<header class="bg-surface-container-lowest dark:bg-surface-container-lowest flex justify-between items-center w-full px-4 h-16 border-b-[3px] border-black bg-gradient-to-b from-surface-container-highest to-surface-container fixed top-0 left-0 z-50">
+<div class="flex items-center gap-4">
+<span class="font-headline-lg text-headline-lg text-primary tracking-tighter uppercase">PokéRocket</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors" href="#">Battle</a>
+<a class="text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors" href="#">Teams</a>
+<a class="text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors" href="#">Dex</a>
+</nav>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined text-primary">battery_charging_full</span>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] z-40 overflow-y-auto bg-surface-container dark:bg-surface-container docked left-0 h-full w-64 border-r-[4px] border-black bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] hidden md:block">
+<div class="p-6 border-b-[3px] border-black bg-surface-container-high/80 backdrop-blur-sm">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-12 h-12 bg-primary border-[3px] border-black chamfer-card overflow-hidden">
+<img alt="Trainer Avatar" data-alt="A detailed pixel art avatar of a legendary Pokemon trainer in a red cap, featuring high-contrast colors and a determined expression. The style is reminiscent of fifth-generation handheld games with sharp outlines and vibrant primary colors against a dark, tech-oriented UI background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ6VpOW9OY5Vwg--xlYWgQ-PX_0pCNgWXO1W7lyaEBYq3QSMcZ9s8eQybVEGsaDi9zkfvT9lJuLbLjNhUjx-i_Z0Qz5UNnZCJEDPqFbnyWS_hUpLO3OqO8ZGBeGs4UXJiNP-qC9FywsethTDcmNnJ5PC5t-N7oQIMnV7WiJN4sMoDzPkk-tDlLCTA_RNz88_iyLbxQwJcBbGcTTcScsrDa7EmuJFKtDIUhBlWTVwH4DaMTqrSqNEyZ4hnX1EBM_D9BvmfGxQOUkSk"/>
+</div>
+<div>
+<div class="font-headline-md text-headline-md text-on-surface leading-tight">TRAINER RED</div>
+<div class="font-label-lg text-label-lg text-primary">ID: 00482</div>
+</div>
+</div>
+<button class="w-full bg-secondary text-on-secondary py-3 px-4 chamfer-button border-[3px] border-black font-bold uppercase hover:bg-secondary-container transition-colors active:scale-95 duration-75">
+                SEARCH BATTLE
+            </button>
+</div>
+<nav class="flex flex-col">
+<a class="text-on-surface-variant p-4 flex items-center gap-3 hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-body-md text-body-md">Home</span>
+</a>
+<a class="text-on-surface-variant p-4 flex items-center gap-3 hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-body-md text-body-md">PC Box</span>
+</a>
+<a class="text-on-surface-variant p-4 flex items-center gap-3 hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">sync_alt</span>
+<span class="font-body-md text-body-md">Trade</span>
+</a>
+<a class="bg-primary text-on-primary border-l-[6px] border-primary-container p-4 flex items-center gap-3 active:scale-95 duration-75" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">history</span>
+<span class="font-body-md text-body-md">History</span>
+</a>
+<a class="text-on-surface-variant p-4 flex items-center gap-3 hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content -->
+<main class="md:ml-64 pt-20 pb-24 px-4 md:px-8">
+<div class="max-w-5xl mx-auto">
+<!-- Pokedex Style Header -->
+<div class="mb-8 bg-on-tertiary-fixed-variant border-[4px] border-black p-6 chamfer-card relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-white/20"></div>
+<div class="flex justify-between items-end">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-white uppercase italic tracking-widest">Battle History</h1>
+<p class="font-label-lg text-label-lg text-tertiary-fixed-dim mt-2">LINKED SYSTEM: GLOBAL TERMINAL v5.02</p>
+</div>
+<div class="text-right">
+<span class="font-headline-md text-headline-md text-primary">RANK: ACE</span>
+<div class="h-2 w-48 bg-black border border-white/30 mt-2 overflow-hidden">
+<div class="h-full bg-primary w-[75%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- List of Battles -->
+<div class="space-y-4 max-h-[716px] overflow-y-auto pr-2 custom-scrollbar">
+<!-- Battle Entry: Victory -->
+<div class="bg-surface-container-high border-[3px] border-black chamfer-card p-4 hover:bg-surface-variant transition-colors group cursor-pointer relative">
+<div class="absolute right-4 top-4 font-headline-md text-headline-md text-secondary">+24 pts</div>
+<div class="flex flex-col md:flex-row md:items-center gap-6">
+<div class="flex-shrink-0 flex items-center gap-4 border-r-[3px] border-black/30 pr-6">
+<div class="bg-secondary p-2 chamfer-button border-[2px] border-black">
+<span class="font-label-lg text-label-lg text-on-secondary uppercase">Victory</span>
+</div>
+<div class="text-on-surface-variant font-label-lg text-label-lg">2023.10.24 14:32</div>
+</div>
+<div class="flex flex-wrap gap-2 items-center">
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1">
+<img alt="Pikachu" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsSb6E1Y7wsUdECefDiIjzdf9DFN73N9CyOvKbD4AnFoVHYWwoKlu2zWTcWanSyBmlaQ31MU-vqdDhCgI_efeotdMFFtwZ8RRyX3iK56rUTLHqBZCqbmf9AOKMH9jvxswfw8dOj1hWiK8jyuKO3x88lNyAPvuGM8ts7i65GVpQ17sBBLVw38ndjwP4KzG6ziAoLYYqdoJvmbeaGY8oHfE29BnmwQj7BkKqmgL7zam9SPRt7d6t4rn1tAv1eNRMTNLNQrwPO-5Fv6c"/>
+</div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1">
+<img alt="Charizard" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3bGyxDMGZ6U8I9SKjIKWrN0b9cNaCSolCkuzEhyfoY9x4uv70Ahp-rrDDIeCeulCnPHTnOiYXfvuzbCrxcndLoDuzpFvGRcw4HSlBe7EtlQi9BJV8qJ70mj4zYRI-hXojog1f6rWWmHiosXkwJIIqa2cF6RbBGu5I68y_fVIEAtffe5gbZ2iU5U9pZtK0fxplgNHcNsTrsByGBnu-3pqt9BoLHhreCFOb58WriIa6ekSEOY1zMk5isz76ebIh9UnIKktPwjUUVb4"/>
+</div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1">
+<img alt="Lapras" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAD4iTIcNp2KiKH5ORLk0ZWY4Pqf4ONMv5RlDN-yLdTBzgA7xjQAiggsM4FzKkBoVw_Dee77VNJNcaVytQk6U5F6zM59Zk9WbAl4aAK6puExhrKmRpx8f9hVn7vlg-wwIuWZszqp09rS3x6LUgiHMyKyqS9LtHUUHqJb_NbiSBxm1FP_l6opHsAu35g3xaCfcb0DJhc7CF96h_yJsoYriSbgXEHFRiaGps6JqxjOukAAOdFmEnSa5VMKzxArdGQEEv3zks1kK0a224"/>
+</div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1">
+<img alt="Snorlax" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCm_PdPTVrFnRkA_VmIUbKD3JnzsTrXPjcclYd85nzJfkqK88b1V1Ci6GHa5XOUSyZwS1sGl_0DEQLMpsNNXNL1rYVPzaVZDGCNLlZcv3dU2akvnoaZaMcfy8AHvlaf0vnor0wcKV1k900XkdHp9TJurLg4bctciuytrh2ml0rsMKJQ5jlas_lOCf5qOWTjdhMh11kNFepg4BWFJO7Qh6x-CmDlF7NW3drXPo1ejD5xK2wyI31QYhjngKRAWS6nzRSfxlVPQKF7pNE"/>
+</div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1">
+<img alt="Venusaur" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvx1NoR9A9otWFPapX_0cDgKOk87ofpG7u02X6ycmAdkWmkUOGdUiJnJYKjjWBg7ZAGYs8qpINtXf1sI0yFw2Im6UwSeUnIpyQc5YnPZ8UjMn5ABpVTXimDMl_EuCeckqwaGY4kbzv4VRVlkq-mQKxomrN9YR9LqdsrSj9tE2-6tIfw0sA3gzX5hAlViEHFQYkkecbi2doODyo8SOQDzww4MYFxYR-bqEKoekdTFDSlIhn0KXVXeRCrGpuvU4Hy7wUZSDC1OnyTiY"/>
+</div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1">
+<img alt="Blastoise" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7JIcP_thnb6nantHVTYbTrkZpcRih0SK511_BWQWmKeZtzHXY7VRSbRYtwWoEwtv5I2YuFJX9NxGTktPdpvZJCjE4hdzIwd96_6iJdL6anUmka3sTPTTU8OfFnNV7lQ7dyzXpjaFI4A5BH2BuC4jSak3lz-cIqmvY-iuMXJKyhilTZRWnBWVGK8HmdeB5MjsEOjK9W0DovrI3C7f1Iud0ICIj7rVqBfsEhLHvXM2EiOXRGfn_Vd-39UlvV1m9Ow6bxxD9Sw1e0tw"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Battle Entry: Defeat -->
+<div class="bg-surface-container-high border-[3px] border-black chamfer-card p-4 hover:bg-surface-variant transition-colors group cursor-pointer relative">
+<div class="absolute right-4 top-4 font-headline-md text-headline-md text-error">-18 pts</div>
+<div class="flex flex-col md:flex-row md:items-center gap-6">
+<div class="flex-shrink-0 flex items-center gap-4 border-r-[3px] border-black/30 pr-6">
+<div class="bg-on-tertiary-fixed-variant p-2 chamfer-button border-[2px] border-black">
+<span class="font-label-lg text-label-lg text-white uppercase">Defeat</span>
+</div>
+<div class="text-on-surface-variant font-label-lg text-label-lg">2023.10.24 13:15</div>
+</div>
+<div class="flex flex-wrap gap-2 items-center">
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1 opacity-60">
+<img alt="Dragonite" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCbxv_8E4ZartGusOnX1I_OgsGdTQeAsm3JR3nPXp85v9IwDv91VaSSnBFCJQM4Jzuf-Y5wmKiH7L-oJ8ckHySVr5snmtlaRY115jKOrPQGb6svVVlEzAIo4aX2WopEOS8-d7cKaJ1GHsomLILnKMKJyNLT2LLRJDrwB8XoWTcpCbDLDG-W-DXrYtRO-Ph4rHgDFwOvjg2cFOZA9jdZTrVq-mvY5JUSbwp6bJ_I1LgbTbETrCBQ2ILQup4IMHnh1FTuLSrgFNx_Pg"/>
+</div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1 opacity-60">
+<img alt="Gyarados" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7Op1xYF78iWNheEwsbpDYgMWlL7NxuYBA7x6eldidsZV5yvUb7GmAI_uh7tQJCQ08i6SrDtDnjjpVDAUqBjxJvyoXQwsGFYfeyZPUKJ7hrx1bL6JUZVLfWVzKxtczk3tBsho0x_poKGMOR9LVxCtl8-OHi5aae67n0pI_epdRZeTDMoAfvySlR4_GpoHBxxAW0p9mAecUwwAdeMFDA8ccuqSNcncG8oxH50iuzhZxL4YLt0mJdD2-65_hpuM5sY3iDMurUgDdgfM"/>
+</div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1 opacity-60">
+<img alt="Scyther" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAA9Ll-Bgip7z06GuBP0zFL5aJaAuw54c6umFBoMRu1q3VUswLtYl6rXOmhli6CdoUT6rdx7cmtiGNWmoEF22Vw_duZ59iQTXvMU0OP0eXAM_wpeakW_Us3wqLL3172q2TRvRaZQIvaZCwFAksH_KZGLFdMnPHr-2IuY811Vsb5J3H_LncBvb-FzyODhWuZ_RsSIrGeWbx0O2xvF6wP_laVUYR42iQeD5w0oSTmaaQ57g-N2nSvjB2HeGh1CgCTRTHSLvGFZPpHaZI"/>
+</div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1 opacity-60">
+<img alt="Jolteon" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwUWsX5mufDqbiDt19NwLcIfHxIaugfV0oM_aAIZBdz5cz5fFdfJJokX-VGJzYWYGuHTYomdSA_43JoxweknaF4ujDHk4WmdNG-goSOWJ8EOV5uG6vCWxGTITEqFjXx18Gr97utBFoLzCV83-THJXvrLI3EnqQx3wW2CAorM7QBklCDhZQgWaz7tM2AzfO-f8riiOpgs_QzySq49G4Ftrm-YjZUvmA5WSgE1SEnrBXgMMCAmEllK8HZTUOjB_eCuZXOaz6LvrBM8s"/>
+</div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1 opacity-60">
+<img alt="Machamp" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBt9K7laR3QSBVB4XV62zdMu-xWBRqGunmKIYmicqrejz1XKLEVWnn2mevXhf91gfKLcbSwgFsY0mgL2K5Ai7wQaX2NIseWTrILylfW41QDvaZrRzqD1kKNwnwF3M8DZrvAidba83SeQXOnizw16YfNcB2oqdpVMUJI05_wCXPm7kIKYBvLL2KVHECKMq-SE_HxP4dsrbXHQExQCx7higXlu1sXVW0nELXqQeH9WuD3rJuy3ZYLD8opedKrfCRWcNLFhX8YUlvIoAg"/>
+</div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1 opacity-60">
+<img alt="Alakazam" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiBEpF4jznZMTEg9QezHD6IpmzwMbsyZbmFwM2RMp9eTglrcg0hVU9cldcOwr6-DOyC69f1BED7TdSBOrNHHdMEIEY3gc8G-1aLNBfErvjqejRrsb-8tFLLob_LWKfx6V09kpEXYYzvVvZx-mK0VC9wGo6dZlXyCIMR0hufQxBaO-OGWudX65828xVnVw-XsVou0_PgcWoQXZg2wogivvGNa98VwuB21XULpRo0mbZwEpQRYktQeruVcaGpJtUcP6IDUEVugpWF30"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Repeating items for full list feel -->
+<div class="bg-surface-container-high border-[3px] border-black chamfer-card p-4 hover:bg-surface-variant transition-colors group cursor-pointer relative">
+<div class="absolute right-4 top-4 font-headline-md text-headline-md text-secondary">+21 pts</div>
+<div class="flex flex-col md:flex-row md:items-center gap-6">
+<div class="flex-shrink-0 flex items-center gap-4 border-r-[3px] border-black/30 pr-6">
+<div class="bg-secondary p-2 chamfer-button border-[2px] border-black">
+<span class="font-label-lg text-label-lg text-on-secondary uppercase">Victory</span>
+</div>
+<div class="text-on-surface-variant font-label-lg text-label-lg">2023.10.23 21:04</div>
+</div>
+<div class="flex flex-wrap gap-2 items-center">
+<!-- Using placeholders to represent varied pokemon sprites -->
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Mewtwo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQ_evYiK7Q3gPqD1FE_Hdyfy0U61Ks7-YqdTEXhMNc_ViamU0yw_7zFUKKFr5ie7vTuRwNCyDbHNPAyMStEanZ5aqJsFbyeyg93Oy2FIHBFrpeq9_j4Xz-pE149q9-ywqa7oostoX5AjEy16iqvyb0iEbI11pDvloH3VrBUfE9VrRGYqQ1PVPn2ucFTJzw9b-IkAoI4WU61T08W9wTB8f6OivXBONVMKNC_XDRKXFWBlRG4IO5g0ArYmVneajqWOTQRGyKjb69ymY"/></div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Mew" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDg-IP8dsPrmjrTnSpU85WeGA-jwYLaGYoBT-j_lg-LM3hO4-AaUkxqDg2BTQeou4J8mwa_faXn2AAUdh_Ps58_XYvoGXCIQdtazKQJO0MKvkpvpdmIDxfmAL_L6VfC-LU8ellxDSgGXwMpxkLOd4ncOgatX0aIUIf4kCKR-Wx92-weTf9sDnF8eHRqOzMLnz-xSoJrnVfqeWyRyjK1M2oH3KxgRfsfKdlWLd07AYkI9N4KhnsBxx74Lcw_6DdLiLGE0girEz0a1gQ"/></div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Lugia" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdyZ1cJ8Zaq1A8ffNKAxVsUQ82XW5ySqkLVo0J4VSyMsM7uTb-8Ur_P4kINhm4MZnpLFaHF-3Osbpf0IH8sdKZLzt4KENwANy2twGKguyltbsO7f2qCxBmUX9lydPiobv4YYNW9vpF4hXRQn4buMczw8-j2mUltwyksnYnJgwitkGx-ttUFW-Q51QA04ery0Uz7h-MRCNg65rauB3xsf9uQsRjAIJrJtvjmURflq5JcSvYOIqJtHJS_T-iGAY3RnAhj2F8vyXL0sM"/></div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Ho-Oh" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxOQ6CIYOg79vLezHvDPkWJFSZNdNj9ylECbFrfygOiCpbDv44D8S5P4VRvJ5hBFx-Xng26Al9bQXWZ0iSG5e0uPAcfCQPhDcEfpQBSKOP95Vxhok1ftMcQUxYzHWxy-CHU6RcPRyJNUdqHMQjj-3qSq3gL-p4NkcMyBkHet7qLnZ_xoDSJZZd14hz3GAnnxuq336mXQPzTjTx2dDFio1cF3a3f9XLHmp6kCY_PB_Q0AFkqY1eN559Tc7hLWQ1oYPPjiPk23cJMC8"/></div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Rayquaza" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvii0TkQhv6YVfY8I1hBp7EobEsCV4tCEwGulLaPnS8LYt28cMTC1XCzSKGQ51MNgcnUrvgunc24yLltnjbypiaoj_nImNh05-_TSyRT-Sx3t02_5nHk8-YjOApeNgjXQMgT7aRGww6Hv2dE19gHDsmKju6tJFzgZ8Xu4nL7GG9JQ8RW4QXVa7bFV1cKq7z3PX3Gh1bKI7hWNYgPapIdy_TbfFh1ClcJR0waTVNCd_xKeztn2nhvxp-I824coHzN2W8nqxCymeH9A"/></div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Kyogre" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANxd3Rg1MDZR26ELEDqY-q783zDDUuIkynGSxyF83DvxK14nFqQGO-pN3zvf4nC1zSzVRB3OHM5WzLf_pDOR7qDPBy8gaFSpAwzIEuW0-4miW4oLBKPDsXXeYm5Xt-9nCEnj-hwXjjXWYUNrcNHqqBm5eHXRXddLZ9EAYWme5e3RybLx1-Q75YeOOiWuSWDOHfSTRunGptUmEt92sFV8badaKm8EzbrCdMrElbaUmP_V6igZJCnVjgqKkjjsv-VcJCOPH0myX_NIo"/></div>
+</div>
+</div>
+</div>
+<!-- Placeholder for more entries -->
+<div class="bg-surface-container-high border-[3px] border-black chamfer-card p-4 hover:bg-surface-variant transition-colors group cursor-pointer relative">
+<div class="absolute right-4 top-4 font-headline-md text-headline-md text-secondary">+12 pts</div>
+<div class="flex flex-col md:flex-row md:items-center gap-6">
+<div class="flex-shrink-0 flex items-center gap-4 border-r-[3px] border-black/30 pr-6">
+<div class="bg-secondary p-2 chamfer-button border-[2px] border-black">
+<span class="font-label-lg text-label-lg text-on-secondary uppercase">Victory</span>
+</div>
+<div class="text-on-surface-variant font-label-lg text-label-lg">2023.10.23 18:45</div>
+</div>
+<div class="flex flex-wrap gap-2 items-center">
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Hydreigon" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRRlv7MDpZjO7bZdiB8yB_CwC2EPssjTvJvSMlwQXtZ1_FAQL5hCVSDgl1fdtbISIJzpzRdUiUafulzOZ_mTYvVKpACmF2fEsIQchB9ql4Bpef706BX8_eDeVMtgCoEWUbfnwDjxeZmhXc-816kN9NsKbwQMOtjmVn_3ASItvbup8sTRcunsoBOJJiEi_V-zeW_C2Qj01QVrHzIlIj5QVOlrOAwJam7k6c8NZ5O5Jqjwy7HF_NHgkZgK7Ws7jJK1y92r-T_SgO4t8"/></div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Garchomp" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNFqmyccwg9DaAK1NR29qcZgStqAEfUlb_zxL-s7xCGDhB9-wJDMSB-01NLrYDMMfzS1d5wp2ryez-85VzZdeUicPW0E7bwlcF7NFyAK-2tKbHJD1vlv-Mj159SxfLQR08jI7iCUm1hc7raoGsMR_uKsAu20HeB_6NZGMS34QvRLWbIiqRk_QyxLtvQDXkxJcCHT8h-qOpris2JRFMJWl_qrcRDRPZJ3V0Etchwfj_djhw7yF4-Ewgc3AP9RUaerZ1cA5aGZO4QQc"/></div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Tyranitar" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-k3ZSEdONGuddvejzEJkfq1I_MSO1nbSW7_7IlmSEmtApwjmMFz0BWB5g6K68Q6gBNIVxzcgzVkP6S0AXPEwaT6VuaBBSZRE8Zcv0Ph_8pJHYpGfHhWmiF-oEBLee9v4zBwXdaikwrMhzxDPf6bwUCHO6V4yrJhCjaXX8mvYA-WxQmcOuDpYggzqpA7TwDF6hhxhSaM0Kkn6NqFSUkp4KGDM7_r6Wx4ZzEsOy_YKhysTxs9uymbFEIQsfFukDG9ps_k5o2q_xs-s"/></div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Eevee" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC92TWBS1gkngp_QzGIZvJACpkqot4yKmhcrpnyyvIssAzyvSV42tP5kz91lWZK6qGmV9ZjK_lyEYEOKNxibg_WVGwHl7vbV3ZRd77vpfDN0EDSWhAWGXvPT0ZJIBRPPKfObFmj8URimZBpD2DVpaJuzMAQUX6MWXi2CiXLmc_g1sszyAgfi43tmcQa7_b8R8zBv054MeiybhO_nAo-Jx054VDtphM2HKiqvzEgOKpyys5ZQxA53sF5FqpBqG8NOBJ-jVukOfdlku8"/></div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Umbreon" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR9dJIcERqWICdih731UQ4VnxMX7Rb4Vd7hocXz05kQcUqS5gD3ZlaNSb3_At7iEsEmT0-CXlVN0vCF2RODMMllIcWnpWo2oCzhUQ91-9Hk9Oxpe7pyYf9LrS5y-9pq1ItcFrz8qDOy8nhpOw8C4co0GE2sDOX7Mx0XGIrFapR-lFZocsP1bjBSjEIBY64LtVkl4D0b1bMB-WcDQOHX3uoTh46O5I6YFh1eCVChybs8S_XwIyge4xfnpxbch4-0wUVGuQiWQrycHs"/></div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Espeon" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhc-bJceRrcHqfs-3o2UYtIo7uLkY7o5IC7pCiv4uqG4oc2CQOyHH-fYpf5nXxdMm6CrYlDvGyzPg3BZQPyWM3bTzd6T8OLZTx4fbIJ__iQkZDImT6b_Lwn-qVsj14VcRKqWGDgwp2ICoC5fYmoew_Rr9xO0NM5kreQfxr9YWGrAWZ0LBbq23zVbNHiGueo8USZG7DofqCbw5V9DPC2cGWygOFSM0ONegTt9ISekkTZ3F7bM5h0LJQxa7WNpukEI-Xul38RXMOyQs"/></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-high border-[3px] border-black chamfer-card p-4 hover:bg-surface-variant transition-colors group cursor-pointer relative opacity-80">
+<div class="absolute right-4 top-4 font-headline-md text-headline-md text-error">-22 pts</div>
+<div class="flex flex-col md:flex-row md:items-center gap-6">
+<div class="flex-shrink-0 flex items-center gap-4 border-r-[3px] border-black/30 pr-6">
+<div class="bg-on-tertiary-fixed-variant p-2 chamfer-button border-[2px] border-black">
+<span class="font-label-lg text-label-lg text-white uppercase">Defeat</span>
+</div>
+<div class="text-on-surface-variant font-label-lg text-label-lg">2023.10.22 09:22</div>
+</div>
+<div class="flex flex-wrap gap-2 items-center">
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Lucario" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmYEsn3IbVRnHhJHBO6EvNmRvKpuivNvrMuRM57aV6IAwJKhuD_8CW7DXPj6LwIsZRqbOtfl7Q183ZMsP_WUfOSCNFKUHSO6FwFirumEEApLSJmr_erOkFzyR6wxPdOhx_NNteCqVeRFxogRAYZ6CxBJlu7OniaIZMPZ-pOI5yZ9QJ0vnEa2i1QBumRpxKPE6HvbNExCu_e4AzoCfKUFRf3UjRj_CMTAC35dxvQ5jayDBs6mCw5LAVH8-jXo0wNdqPKqwJXoixhgI"/></div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Lapras" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZQqxrAdjW268VmRWSnx_1y1J0QjVDtmDx-swXQXO8MijnTuZcl7ZKTia12aOxoVW_uhrYC17hKbzsU9xTIf6VGgNJyLORkqCnWM7KwH4db8NJuHGjEsuxOQkR3dDyRYS3qsn4jS4UB9tgO71y1Av7shf8yQE63bv-z5Fr1NWiwQcSGrhfIaBREj6jyIEjynhb2gilciSLVflQkZTcaq_y5kRDoT1MKJagupe6MVK3Iaqb7Da_XsKVXjxusAbDzLdPRaHNtwXP8xw"/></div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Pikachu" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCP3oCNCP6QPNvj8yHl0cJhbjFKdjdMd_m7QtfNiMwigvWyyWsp0foGX2uu2qokjq_WTDpKMik0M6wh5lWr4dI6TOitUDRNWF2lUAXJreQzGSelJUG3F_nLGuVYB137nj-t2xY_M7N0ow7zUBA047mC7w2Gf83w2idxWDVgv8Hz8acI_KYIF5QY2dcdseKXk5ZL1j4-I8uEvcJUUUauS7bNl0d3BkLG9gCqwjVZ1xxEs166bN89jo-hYMaQ_HB6IbFX43DsxYS7v7k"/></div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Jigglypuff" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuIUMD3xg4RPutwAHw5be7SejO6JRHfJh16dzq6ImW_gO76uiEGmKFD9zVeYIaOQYgBl5-eWB1fEiXUo6vA1M046TV_7LNbKfKcxc0TUg8ViLYDLi8OU8CVz43vuUFjS3ekwLYUhpvEoRy8O6Rgfm1AZ0zeVCeKwejHl4AhR6uBXpafjsKSh2Tsftbcd-L5Pb7i4hmcmDhUGn7rJy906cb1oTAMpSsEhOAFpOOhrohTkiF5YcdCQzBhuD4r8OjX1Pd6CGajGVFTBk"/></div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Bulbasaur" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA227ExHppoLGfCkLv2BbHR7_9laUepFdkTptWB_CfFrZOzS85TFwkBSH3n-ZFJj59sv_bGcxNTE3redpJUFa-EC5BxW_tkaenIs2DEdjWFfhjiAaiwlaW1904kpj8DaZOSDrlGGKa1GNUTKF0Br6ehO_PM2mY37QW1Fm7fvxaZR1e2CZZ_IIzNnCKmyxGnzklnXUNQpk94CVwKjDP7HQhZum_K3Ff1hox0Q664nIF6ndFFeLCPu9yV7X4gasVdBKonQKWoNcU2Wls"/></div>
+<div class="w-12 h-12 bg-surface-container-lowest border-[2px] border-black rounded p-1"><img alt="Charmander" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-9g-PYzitt3lyQ9kOJVyG4P9N7Ote9B4vCIZWpTCEoDAO2XGD5yqg5rdP9xW06m91UIQsD5OnyJdXWYZZNHeni_pbgEVF98gb3IJKY5XlQOKJZg81T1zX-tEWqJvbwKK9yVkwEc4ZYKTNTj9e9MsmO2oa3QA6Sk8YK2fY9zgGqlIYm8UYV2BWFqc__CKnS__a4AZr-rsUYrMT1bbCIzjX6rc7YfRF7LBX86p-iV39N0MIXovUgubSCihRUfE5AM1-K489jUGiGKM"/></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 gap-2 bg-surface-container-highest border-t-[4px] border-black rounded-t-xl md:hidden">
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-container hover:text-on-primary-container">
+<span class="material-symbols-outlined">swords</span>
+<span class="font-label-lg text-label-lg uppercase">Move List</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-container hover:text-on-primary-container">
+<span class="material-symbols-outlined">cached</span>
+<span class="font-label-lg text-label-lg uppercase">Switch</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-container hover:text-on-primary-container">
+<span class="material-symbols-outlined">local_mall</span>
+<span class="font-label-lg text-label-lg uppercase">Bag</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-container hover:text-on-primary-container">
+<span class="material-symbols-outlined">directions_run</span>
+<span class="font-label-lg text-label-lg uppercase">Run</span>
+</button>
+</nav>
+</body></html>

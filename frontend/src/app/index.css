@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design System Tokens ──────────────────────────── */
+:root {
+  /* Palette from wireframe */
+  --bw-black: #1a1a2e;
+  --bw-dark: #16213e;
+  --bw-panel: #0f3460;
+  --bw-blue: #533483;
+  --bw-blue-light: #7b5ea7;
+  --bw-white: #e8e8e8;
+  --bw-off-white: #c8c8c8;
+  --bw-hp-green: #48d058;
+  --bw-hp-yellow: #f8d030;
+  --bw-hp-red: #f03028;
+  --bw-exp: #60a8f0;
+  --bw-text-light: #f0f0f0;
+  --bw-text-shadow: #000;
+}
+
+/* ── Global Reset + Base ────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'JetBrains Mono', monospace;
+  -webkit-font-smoothing: antialiased;
+  image-rendering: pixelated;
+  background-color: #131313;
+  color: #e4e2e1;
+  overflow-x: hidden;
+}
+
+/* ── Scanline CRT Overlay ───────────────────────────── */
+.crt-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background:
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.08) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+  background-size: 100% 3px, 3px 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* ── Type Colours (Gen 5 palette) ─────────────────── */
+.type-normal   { background-color: #a8a878; color: #fff; }
+.type-fire     { background-color: #f08030; color: #fff; }
+.type-water    { background-color: #6890f0; color: #fff; }
+.type-electric { background-color: #f8d030; color: #333; }
+.type-grass    { background-color: #78c850; color: #fff; }
+.type-ice     { background-color: #98d8d8; color: #333; }
+.type-fighting{ background-color: #c03028; color: #fff; }
+.type-poison  { background-color: #a040a0; color: #fff; }
+.type-ground  { background-color: #e0c068; color: #333; }
+.type-flying  { background-color: #a890f0; color: #fff; }
+.type-psychic { background-color: #f85888; color: #fff; }
+.type-bug     { background-color: #a8b820; color: #fff; }
+.type-rock    { background-color: #b8a038; color: #fff; }
+.type-ghost   { background-color: #705898; color: #fff; }
+.type-dragon  { background-color: #7038f8; color: #fff; }
+.type-dark    { background-color: #705848; color: #fff; }
+.type-steel   { background-color: #b8b8d0; color: #333; }
+
+/* ── Chamfer / Diagonal Cut Classes ────────────────── */
+.chamfer-tl {
+  clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
+}
+.chamfer-br {
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+}
+.chamfer-both {
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+}
+.diagonal-cut-tl {
+  clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 25%);
+}
+.diagonal-cut-br {
+  clip-path: polygon(0% 0%, 85% 0%, 100% 25%, 100% 100%, 0% 100%);
+}
+
+/* ── Gloss / Bevel Effect ───────────────────────────── */
+.gloss-effect {
+  background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 50%);
+}
+
+/* ── HP Bar Colours ────────────────────────────────── */
+.hp-green  { background-color: #48d058; }
+.hp-yellow { background-color: #f8d030; }
+.hp-red    { background-color: #f03028; }
+
+/* ── Material Symbols ─────────────────────────────── */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* ── Scrollbar Styling ─────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #1b1c1c; }
+::-webkit-scrollbar-thumb { background: #41493a; border-radius: 0; }
+
+/* ── Text Selection ───────────────────────────────── */
+::selection {
+  background-color: #93e569;
+  color: #113800;
+}
+
+/* ── Battle Animations ────────────────────────────── */
+@keyframes attack-lunge {
+  0%   { transform: translate(0, 0); }
+  30%  { transform: translate(20px, -10px) scale(1.05); }
+  60%  { transform: translate(-5px, 5px); }
+  100% { transform: translate(0, 0); }
+}
+.anim-attack { animation: attack-lunge 0.4s ease-in-out; }
+
+@keyframes damage-flash {
+  0%, 100% { filter: none; }
+  25%       { filter: brightness(3) saturate(0); }
+  50%       { filter: none; }
+  75%       { filter: brightness(3) saturate(0); }
+}
+.anim-damage { animation: damage-flash 0.5s ease; }
+
+@keyframes faint {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(60px) rotate(15deg); opacity: 0; }
+}
+.anim-faint { animation: faint 0.6s ease-in forwards; }
+
+@keyframes slide-in-left {
+  from { transform: translateX(-120px); opacity: 0; }
+  to   { transform: translateX(0);      opacity: 1; }
+}
+@keyframes slide-in-right {
+  from { transform: translateX(120px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+.anim-enter-player   { animation: slide-in-left  0.35s ease-out; }
+.anim-enter-opponent { animation: slide-in-right 0.35s ease-out; }
+
+/* ── Pokeball Spinner (Lobby) ─────────────────────── */
+@keyframes pokeball-spin {
+  to { transform: rotate(360deg); }
+}
+.pokeball-spin {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 4px solid #e8e8e8;
+  border-top-color: #f03028;
+  animation: pokeball-spin 0.8s linear infinite;
+}
+
+/* ── Metallic Text Effect (Logo) ─────────────────── */
+.metallic-text {
+  background: linear-gradient(to bottom,
+    #e4e2e1 0%, #8a9481 45%, #131313 50%, #41493a 55%, #e4e2e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(4px 4px 0px #000);
+}
+
+/* ── Battle Log Fade In ─────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Modal Animations ───────────────────────────────── */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ── Focus States ─────────────────────────────────── */
+:focus-visible {
+  outline: 3px solid #93e569;
+  outline-offset: 2px;
+}

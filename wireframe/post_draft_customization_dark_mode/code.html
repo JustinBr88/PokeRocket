@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PokéRocket - Team Customization</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#930100",
+                        "tertiary-fixed-dim": "#ffb4a8",
+                        "on-surface": "#e4e2e1",
+                        "surface-container": "#1f2020",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-tint": "#89db60",
+                        "surface-variant": "#353535",
+                        "on-error": "#690005",
+                        "surface-bright": "#393939",
+                        "on-primary": "#113800",
+                        "surface-container-lowest": "#0e0e0e",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#286c00",
+                        "on-primary-fixed": "#072100",
+                        "on-tertiary-fixed": "#410000",
+                        "primary-fixed-dim": "#89db60",
+                        "primary-container": "#78c850",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary": "#690100",
+                        "on-secondary-fixed": "#001e2d",
+                        "primary-fixed": "#a4f879",
+                        "error-container": "#93000a",
+                        "on-secondary-container": "#003c55",
+                        "outline-variant": "#41493a",
+                        "outline": "#8a9481",
+                        "on-background": "#e4e2e1",
+                        "on-secondary": "#00344b",
+                        "primary": "#93e569",
+                        "surface": "#131313",
+                        "on-secondary-fixed-variant": "#004c6b",
+                        "secondary-fixed": "#c6e7ff",
+                        "surface-dim": "#131313",
+                        "on-primary-container": "#1c5100",
+                        "background": "#131313",
+                        "surface-container-low": "#1b1c1c",
+                        "on-tertiary-container": "#920100",
+                        "on-primary-fixed-variant": "#1c5200",
+                        "on-surface-variant": "#c0cab5",
+                        "inverse-surface": "#e4e2e1",
+                        "inverse-on-surface": "#303030",
+                        "surface-container-highest": "#353535",
+                        "tertiary": "#ffc1b8",
+                        "secondary": "#82cfff",
+                        "secondary-container": "#00abec",
+                        "tertiary-fixed": "#ffdad4",
+                        "tertiary-container": "#ff9989",
+                        "secondary-fixed-dim": "#82cfff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "gutter": "16px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "12px",
+                        "border-width": "3px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Space Mono"],
+                        "headline-lg": ["Space Mono"],
+                        "body-lg": ["JetBrains Mono"],
+                        "body-md": ["JetBrains Mono"],
+                        "label-sm": ["JetBrains Mono"],
+                        "label-lg": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-1px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "label-sm": ["10px", {"lineHeight": "1.0", "fontWeight": "700"}],
+                        "label-lg": ["12px", {"lineHeight": "1.0", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .chamfer-br { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%); }
+        .chamfer-tl { clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px); }
+        .gloss-effect { background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 50%); }
+        .type-fire { background-color: #F08030; }
+        .type-water { background-color: #6890F0; }
+        .type-grass { background-color: #78C850; }
+        .type-electric { background-color: #F8D030; }
+        .type-dark { background-color: #705848; }
+        .type-steel { background-color: #B8B8D0; }
+        .type-dragon { background-color: #7038F8; }
+        .mesh-texture {
+            background-image: radial-gradient(#2a2a2a 1px, transparent 1px);
+            background-size: 4px 4px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary selection:text-on-primary min-h-screen mesh-texture">
+<div class="crt-overlay"></div>
+<!-- TopAppBar Shell -->
+<header class="flex justify-between items-center w-full px-4 h-16 bg-surface-container-lowest border-b-[3px] border-black bg-gradient-to-b from-surface-container-highest to-surface-container fixed top-0 z-50">
+<div class="flex items-center gap-4">
+<span class="font-headline-lg text-headline-lg text-primary tracking-tighter uppercase">PokéRocket</span>
+<nav class="hidden md:flex gap-6 ml-8">
+<a class="font-headline-md text-headline-md text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors px-2" href="#">Battle</a>
+<a class="font-headline-md text-headline-md text-primary font-bold border-b-2 border-primary pb-1" href="#">Teams</a>
+<a class="font-headline-md text-headline-md text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors px-2" href="#">Dex</a>
+</nav>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="signal_cellular_4_bar">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined text-primary" data-icon="battery_charging_full">battery_charging_full</span>
+</div>
+</header>
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] z-40 overflow-y-auto hidden md:block w-64 bg-surface-container border-r-[4px] border-black bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
+<div class="p-6 border-b-[3px] border-black">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-12 h-12 bg-primary-container border-[2px] border-black chamfer-br flex items-center justify-center overflow-hidden">
+<img alt="Trainer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdBBa9U3QjiHnrX3UacEHRnSz1GMXKd2J6MDbxxO9aJ_wnb429c9L7OkQ4vTGY25KFmrTIaiXA6V8w4Fx3IhKwadoVxCUvEIHzrU4dEP34F1mIMAAME_u60Vwl8qXWvoiUaCPbzTrKmM4Uub4P_ZR7bDYyqqDeBBEyeO-ozTm4EKdVqqBeLKl3pouINLq3ICPN4PtpkiU7uUh7LYqroqmS65x4AxFBf3w-XzTnGL-8JSjLs47hG_sKpV4tB4zvGq4uOyjHXjv8dvo"/>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface uppercase">TRAINER RED</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">ID: 00482</p>
+</div>
+</div>
+<button class="w-full py-3 bg-primary text-on-primary border-[3px] border-black chamfer-br font-bold uppercase hover:bg-primary-container active:scale-95 transition-all gloss-effect">
+            SEARCH BATTLE
+        </button>
+</div>
+<nav class="flex flex-col">
+<a class="text-on-surface-variant p-4 flex items-center gap-3 hover:bg-surface-variant transition-colors border-b border-black/20" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-body-md">Home</span>
+</a>
+<a class="bg-primary text-on-primary border-l-[6px] border-primary-container p-4 flex items-center gap-3 border-b border-black/20" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-body-md font-bold uppercase">PC Box</span>
+</a>
+<a class="text-on-surface-variant p-4 flex items-center gap-3 hover:bg-surface-variant transition-colors border-b border-black/20" href="#">
+<span class="material-symbols-outlined" data-icon="sync_alt">sync_alt</span>
+<span class="font-body-md">Trade</span>
+</a>
+<a class="text-on-surface-variant p-4 flex items-center gap-3 hover:bg-surface-variant transition-colors border-b border-black/20" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-body-md">History</span>
+</a>
+<a class="text-on-surface-variant p-4 flex items-center gap-3 hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Canvas -->
+<main class="pt-20 pb-24 md:pl-72 md:pr-8 px-4 min-h-screen">
+<!-- Page Header -->
+<div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary uppercase flex items-center gap-2 drop-shadow-[0_2px_0_rgba(0,0,0,1)]">
+<span class="material-symbols-outlined text-4xl" data-icon="settings_suggest">settings_suggest</span>
+                Team Customization
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant border-l-4 border-primary pl-4 mt-2"> Configure moves and abilities for your selected party.</p>
+</div>
+<button class="bg-primary text-on-primary font-headline-md text-headline-md px-8 py-4 border-[4px] border-black chamfer-br gloss-effect active:scale-95 transition-transform shadow-[4px_4px_0_rgba(0,0,0,0.5)]">
+            CONFIRM TEAM
+        </button>
+</div>
+<!-- Team Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-6 pb-8">
+<!-- Pokemon Card 1 -->
+<div class="bg-surface-container border-[3px] border-black chamfer-br flex flex-col md:flex-row relative overflow-hidden group shadow-[6px_6px_0_rgba(0,0,0,0.3)]">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent pointer-events-none opacity-50"></div>
+<!-- Left: Info & Sprite -->
+<div class="w-full md:w-48 bg-surface-container-high border-r-[3px] border-black flex flex-col items-center justify-center p-4 relative z-10">
+<div class="text-on-surface-variant font-label-lg mb-1 self-start">NO. 497</div>
+<img alt="Serperior" class="w-32 h-32 object-contain mb-2 drop-shadow-[0_0_10px_rgba(147,229,105,0.4)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXZxb-kjWU1A0jmi3c86xYZfXl7P9hQ_FwudfGNJjVIpNTA9fvrfDd4vCzHjvT1hRtwOzI3F60cDkCFvyheavggAVa3AdwqE-Af1fU6y9ORXCJaoneGWxigtD8nP_JEGock7M8d9RXvXpYyZxgvqroLfNUvJVf_8jQu2sBj_eYUPojCTe_SH_tTbzkDcJelMwc9ePCNPNqGXy-ZzagOZ5cN-OID4yDarHHpD6qiiJ4AInVnfM6-lsFRf6xSbR-el_O3jrnQ0mqMDo"/>
+<div class="font-headline-md text-headline-md text-on-surface uppercase text-center">SERPERIOR</div>
+<div class="mt-2 px-3 py-1 type-grass text-white text-label-sm chamfer-br border-2 border-black/20">GRASS</div>
+</div>
+<!-- Right: Moves & Ability -->
+<div class="flex-1 p-4 relative z-10">
+<div class="mb-4">
+<label class="font-label-lg text-label-lg text-primary uppercase block mb-1">Ability</label>
+<select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br">
+<option>Contrary</option>
+<option>Overgrow</option>
+</select>
+<p class="text-xs text-on-surface-variant mt-1 italic">Makes stat changes have an opposite effect.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div>
+<label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 1</label>
+<select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br border-l-[6px] border-l-primary">
+<option>Leaf Storm</option>
+<option>Giga Drain</option>
+</select>
+</div>
+<div>
+<label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 2</label>
+<select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br">
+<option>Dragon Pulse</option>
+<option>Hidden Power</option>
+</select>
+</div>
+<div>
+<label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 3</label>
+<select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br">
+<option>Glare</option>
+<option>Leech Seed</option>
+</select>
+</div>
+<div>
+<label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 4</label>
+<select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br">
+<option>Substitute</option>
+<option>Calm Mind</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+<!-- Pokemon Card 2 -->
+<div class="bg-surface-container border-[3px] border-black chamfer-br flex flex-col md:flex-row relative overflow-hidden group shadow-[6px_6px_0_rgba(0,0,0,0.3)]">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-secondary/10 via-transparent to-transparent pointer-events-none opacity-50"></div>
+<div class="w-full md:w-48 bg-surface-container-high border-r-[3px] border-black flex flex-col items-center justify-center p-4 relative z-10">
+<div class="text-on-surface-variant font-label-lg mb-1 self-start">NO. 503</div>
+<img alt="Samurott" class="w-32 h-32 object-contain mb-2 drop-shadow-[0_0_10px_rgba(130,207,255,0.4)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcXEB7K9V_jhZAPbdQZkWSxYrKS58JVtnpNd39K3pis7EO6rmqwozY_W8WNfJq_pSs78K7gIpuqw6mfaS7RDtWj7pOcaRsj_1JP-sEgc4C7GWQFEMPyN_8y2rc2Hkv3pvYw9QkXaSle92jeT35ISUbTvYQ5VUq-fLRoN2DeFldJnmL05V-hmHY71Fqi_d0gkCXutbpiZ9q6NqQr2LFI4N6DZkj7SJKfmgQUNqoLGyjKN5-DVoj9HOeO16Yop9sASTaOHvPcoc8SdM"/>
+<div class="font-headline-md text-headline-md text-on-surface uppercase text-center">SAMUROTT</div>
+<div class="mt-2 px-3 py-1 type-water text-white text-label-sm chamfer-br border-2 border-black/20">WATER</div>
+</div>
+<div class="flex-1 p-4 relative z-10">
+<div class="mb-4">
+<label class="font-label-lg text-label-lg text-primary uppercase block mb-1">Ability</label>
+<select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br">
+<option>Shell Armor</option>
+<option>Torrent</option>
+</select>
+<p class="text-xs text-on-surface-variant mt-1 italic">Protects the Pokémon from critical hits.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div><label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 1</label><select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br"><option>Razor Shell</option></select></div>
+<div><label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 2</label><select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br"><option>Megahorn</option></select></div>
+<div><label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 3</label><select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br"><option>Swords Dance</option></select></div>
+<div><label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 4</label><select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br"><option>Aqua Jet</option></select></div>
+</div>
+</div>
+</div>
+<!-- Pokemon Card 3 -->
+<div class="bg-surface-container border-[3px] border-black chamfer-br flex flex-col md:flex-row relative overflow-hidden group shadow-[6px_6px_0_rgba(0,0,0,0.3)]">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-tertiary/10 via-transparent to-transparent pointer-events-none opacity-50"></div>
+<div class="w-full md:w-48 bg-surface-container-high border-r-[3px] border-black flex flex-col items-center justify-center p-4 relative z-10">
+<div class="text-on-surface-variant font-label-lg mb-1 self-start">NO. 500</div>
+<img alt="Emboar" class="w-32 h-32 object-contain mb-2 drop-shadow-[0_0_10px_rgba(255,193,184,0.4)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDV0y1za5U-yfcRRFD6CEsONt6mAc8_dadTFvLCvT85hwz3NsrJeLWxn6S1fuMXrEjFIbMLaVfIpvXSmFGx60XfS09zCTcuvcYb-z1V4AYezTVfVfRraolb7SO8UhAUJntnAkFoc32ZL9j4x28x9fuIhDvJOp6sMPJQtirZkdc44z4rTbKmWGPJF0MPsKeFfMjXy6vI2BgL7W_F9RyrhretdIYAVfbxkaLZmGpz-59tlmGOVMyTV5fxZvsd9MjgH9i5W8wl8hSplmo"/>
+<div class="font-headline-md text-headline-md text-on-surface uppercase text-center">EMBOAR</div>
+<div class="mt-2 px-3 py-1 type-fire text-white text-label-sm chamfer-br border-2 border-black/20">FIRE / FIGHT</div>
+</div>
+<div class="flex-1 p-4 relative z-10">
+<div class="mb-4">
+<label class="font-label-lg text-label-lg text-primary uppercase block mb-1">Ability</label>
+<select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br">
+<option>Reckless</option>
+<option>Blaze</option>
+</select>
+<p class="text-xs text-on-surface-variant mt-1 italic">Powers up moves that have recoil damage.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div><label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 1</label><select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br"><option>Flare Blitz</option></select></div>
+<div><label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 2</label><select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br"><option>Wild Charge</option></select></div>
+<div><label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 3</label><select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br"><option>Head Smash</option></select></div>
+<div><label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 4</label><select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br"><option>Sucker Punch</option></select></div>
+</div>
+</div>
+</div>
+<!-- Pokemon Card 4 -->
+<div class="bg-surface-container border-[3px] border-black chamfer-br flex flex-col md:flex-row relative overflow-hidden group shadow-[6px_6px_0_rgba(0,0,0,0.3)]">
+<div class="w-full md:w-48 bg-surface-container-high border-r-[3px] border-black flex flex-col items-center justify-center p-4 relative z-10">
+<div class="text-on-surface-variant font-label-lg mb-1 self-start">NO. 571</div>
+<img alt="Zoroark" class="w-32 h-32 object-contain mb-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBROQRjCw5IkTAVBY9pBKYEo1PI8TdtZgJmBTtZaJNNu5kb_Ra2QnFUQpcU8XZNtnEjOE41VHK5riSAMw87W8d3yhxo0Gg18cNv0Nveuv3hZI03fI9gds-J2I4GH88yKvXbxPaBjPMo1lX_BufQdxwwF6qwC3c6v9eoNDO84nVhUgF-JjA-2rrI29iKKngGQQBniMqOxuIIsQVX4mbvo8GO647bEeI_2gLmjtnzIz6z1I3RIHcZSnwnnMy4g1cETn13cs0xdbHfzQo"/>
+<div class="font-headline-md text-headline-md text-on-surface uppercase text-center">ZOROARK</div>
+<div class="mt-2 px-3 py-1 type-dark text-white text-label-sm chamfer-br border-2 border-black/20">DARK</div>
+</div>
+<div class="flex-1 p-4 relative z-10">
+<div class="mb-4">
+<label class="font-label-lg text-label-lg text-primary uppercase block mb-1">Ability</label>
+<select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br">
+<option>Illusion</option>
+</select>
+<p class="text-xs text-on-surface-variant mt-1 italic">Enters battle disguised as the last Pokémon in the party.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div><label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 1</label><select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br"><option>Night Daze</option></select></div>
+<div><label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 2</label><select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br"><option>Nasty Plot</option></select></div>
+<div><label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 3</label><select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br"><option>Flamethrower</option></select></div>
+<div><label class="font-label-lg text-label-lg text-on-surface-variant uppercase block mb-1">Move 4</label><select class="w-full bg-surface-container-lowest border-[3px] border-black text-on-surface p-2 font-body-md focus:ring-0 chamfer-br"><option>Focus Blast</option></select></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Global Action (Mobile only) -->
+<div class="mt-12 md:hidden">
+<button class="w-full bg-primary text-on-primary font-headline-md text-headline-md py-6 border-[4px] border-black chamfer-br gloss-effect shadow-xl">
+            CONFIRM TEAM
+        </button>
+</div>
+</main>
+<!-- BottomNavBar Shell (Mobile) -->
+<footer class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 gap-2 bg-surface-container-highest border-t-[4px] border-black rounded-t-xl bg-[linear-gradient(180deg,rgba(255,255,255,0.1)_0%,transparent_50%)]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="swords">swords</span>
+<span class="font-label-lg text-label-lg uppercase">Move List</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container border-[3px] border-black rounded-lg p-2 active:scale-90 duration-100">
+<span class="material-symbols-outlined" data-icon="cached">cached</span>
+<span class="font-label-lg text-label-lg uppercase">Switch</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="local_mall">local_mall</span>
+<span class="font-label-lg text-label-lg uppercase">Bag</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="directions_run">directions_run</span>
+<span class="font-label-lg text-label-lg uppercase">Run</span>
+</div>
+</footer>
+</body></html>

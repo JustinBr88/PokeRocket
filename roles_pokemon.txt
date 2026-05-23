@@ -1,0 +1,617 @@
+1. Atacante Físico (50 Pokémon)
+Pokémon con alto Ataque base, garras, espadas o enfocados en el combate cuerpo a cuerpo y contacto directo.
+
+#015 Beedrill
+
+#019 Rattata
+
+#020 Raticate
+
+#023 Ekans
+
+#024 Arbok
+
+#027 Sandshrew
+
+#028 Sandslash
+
+#056 Mankey
+
+#057 Primeape
+
+#062 Poliwrath
+
+#066 Machop
+
+#067 Machoke
+
+#068 Machamp
+
+#084 Doduo
+
+#085 Dodrio
+
+#098 Krabby
+
+#099 Kingler
+
+#104 Cubone
+
+#105 Marowak
+
+#106 Hitmonlee
+
+#107 Hitmonchan
+
+#111 Rhyhorn
+
+#112 Rhydon
+
+#123 Scyther
+
+#127 Pinsir
+
+#128 Tauros
+
+#130 Gyarados
+
+#136 Flareon
+
+#141 Kabutops
+
+#149 Dragonite
+
+#158 Totodile
+
+#159 Croconaw
+
+#160 Feraligatr
+
+#167 Spinarak
+
+#168 Ariados
+
+#209 Snubbull
+
+#210 Granbull
+
+#211 Qwilfish
+
+#212 Scizor
+
+#214 Heracross
+
+#215 Sneasel
+
+#216 Teddiursa
+
+#217 Ursaring
+
+#231 Phanpy
+
+#232 Donphan
+
+#237 Hitmontop
+
+#244 Entei
+
+#248 Tyranitar
+
+#256 Combusken
+
+#257 Blaziken
+
+2. Atacante Especial (50 Pokémon)
+Pokémon dependientes de ráfagas de energía, ataques elementales a distancia, poderes psíquicos o fantasmales.
+
+#004 Charmander
+
+#005 Charmeleon
+
+#006 Charizard
+
+#037 Vulpix
+
+#038 Ninetales
+
+#043 Oddish
+
+#044 Gloom
+
+#045 Vileplume
+
+#063 Abra
+
+#064 Kadabra
+
+#065 Alakazam
+
+#069 Bellsprout
+
+#070 Weepinbell
+
+#071 Victreebel
+
+#092 Gastly
+
+#093 Haunter
+
+#094 Gengar
+
+#096 Drowzee
+
+#097 Hypno
+
+#102 Exeggcute
+
+#103 Exeggutor
+
+#116 Horsea
+
+#117 Seadra
+
+#120 Staryu
+
+#121 Starmie
+
+#124 Jynx
+
+#125 Electabuzz
+
+#126 Magmar
+
+#137 Porygon
+
+#145 Zapdos
+
+#146 Moltres
+
+#150 Mewtwo
+
+#155 Cyndaquil
+
+#156 Quilava
+
+#157 Typhlosion
+
+#177 Natu
+
+#178 Xatu
+
+#179 Mareep
+
+#180 Flaaffy
+
+#181 Ampharos
+
+#192 Sunflora
+
+#196 Espeon
+
+#200 Misdreavus
+
+#218 Slugma
+
+#223 Remoraid
+
+#224 Octillery
+
+#228 Houndour
+
+#229 Houndoom
+
+#230 Kingdra
+
+#233 Porygon2
+
+3. Tanque / Defensivo (50 Pokémon)
+Pokémon masivos, con corazas pesadas, grandes cantidades de PS o Defensa/Defensa Especial muy alta.
+
+#001 Bulbasaur
+
+#002 Ivysaur
+
+#003 Venusaur
+
+#007 Squirtle
+
+#008 Wartortle
+
+#009 Blastoise
+
+#031 Nidoqueen
+
+#034 Nidoking
+
+#074 Geodude
+
+#075 Graveler
+
+#076 Golem
+
+#080 Slowbro
+
+#081 Magnemite
+
+#082 Magneton
+
+#088 Grimer
+
+#089 Muk
+
+#090 Shellder
+
+#091 Cloyster
+
+#095 Onix
+
+#108 Lickitung
+
+#109 Koffing
+
+#110 Weezing
+
+#114 Tangela
+
+#131 Lapras
+
+#138 Omanyte
+
+#139 Omastar
+
+#140 Kabuto
+
+#143 Snorlax
+
+#185 Sudowoodo
+
+#194 Wooper
+
+#195 Quagsire
+
+#197 Umbreon
+
+#199 Slowking
+
+#202 Wobbuffet
+
+#204 Pineco
+
+#205 Forretress
+
+#208 Steelix
+
+#213 Shuckle
+
+#219 Magcargo
+
+#222 Corsola
+
+#226 Mantine
+
+#227 Skarmory
+
+#241 Miltank
+
+#242 Blissey
+
+#245 Suicune
+
+#259 Marshtomp
+
+#260 Swampert
+
+#266 Silcoon
+
+#268 Cascoon
+
+#269 Dustox
+
+4. Veloz / Asesino (50 Pokémon)
+Pokémon ágiles, voladores, felinos o bichos ligeros con una alta Velocidad base, diseñados para golpear primero.
+
+#010 Caterpie
+
+#011 Metapod
+
+#012 Butterfree
+
+#013 Weedle
+
+#014 Kakuna
+
+#016 Pidgey
+
+#017 Pidgeotto
+
+#018 Pidgeot
+
+#021 Spearow
+
+#022 Fearow
+
+#025 Pikachu
+
+#026 Raichu
+
+#041 Zubat
+
+#042 Golbat
+
+#050 Diglett
+
+#051 Dugtrio
+
+#052 Meowth
+
+#053 Persian
+
+#077 Ponyta
+
+#078 Rapidash
+
+#100 Voltorb
+
+#101 Electrode
+
+#135 Jolteon
+
+#142 Aerodactyl
+
+#161 Sentret
+
+#162 Furret
+
+#165 Ledyba
+
+#166 Ledian
+
+#169 Crobat
+
+#187 Hoppip
+
+#188 Skiploom
+
+#189 Jumpluff
+
+#190 Aipom
+
+#193 Yanma
+
+#198 Murkrow
+
+#225 Delibird
+
+#243 Raikou
+
+#252 Treecko
+
+#253 Grovyle
+
+#263 Zigzagoon
+
+#264 Linoone
+
+#265 Wurmple
+
+#267 Beautifly
+
+#276 Taillow
+
+#277 Swellow
+
+#278 Wingull
+
+#283 Surskit
+
+#284 Masquerain
+
+#288 Vigoroth
+
+#291 Ninjask
+
+5. Soporte / Utilidad (50 Pokémon)
+Pokémon centrados en curación, alteraciones de estado (parálisis, sueño), cambios de clima o con habilidades de control del campo de batalla.
+
+#035 Clefairy
+
+#036 Clefable
+
+#039 Jigglypuff
+
+#040 Wigglytuff
+
+#046 Paras
+
+#047 Parasect
+
+#048 Venonat
+
+#049 Venomoth
+
+#060 Poliwag
+
+#083 Farfetch'd
+
+#113 Chansey
+
+#122 Mr. Mime
+
+#129 Magikarp
+
+#132 Ditto
+
+#133 Eevee
+
+#152 Chikorita
+
+#153 Bayleef
+
+#154 Meganium
+
+#163 Hoothoot
+
+#164 Noctowl
+
+#170 Chinchou
+
+#171 Lanturn
+
+#173 Cleffa
+
+#174 Igglybuff
+
+#175 Togepi
+
+#176 Togetic
+
+#182 Bellossom
+
+#186 Politoed
+
+#191 Sunkern
+
+#201 Unown
+
+#206 Dunsparce
+
+#234 Stantler
+
+#235 Smeargle
+
+#238 Smoochum
+
+#239 Elekid
+
+#240 Magby
+
+#251 Celebi
+
+#270 Lotad
+
+#271 Lombre
+
+#273 Seedot
+
+#274 Nuzleaf
+
+#280 Ralts
+
+#281 Kirlia
+
+#285 Shroomish
+
+#287 Slakoth
+
+#290 Nincada
+
+#292 Shedinja
+
+#293 Whismur
+
+#298 Azurill
+
+#300 Skitty
+
+6. Equilibrado / Brawler (50 Pokémon)
+Pokémon "All-Rounder" con estadísticas mixtas y balanceadas, formas evolutivas intermedias estables y semi-legendarios polivalentes.
+
+#029 Nidoran♀
+
+#030 Nidorina
+
+#032 Nidoran♂
+
+#033 Nidorino
+
+#054 Psyduck
+
+#055 Golduck
+
+#058 Growlithe
+
+#059 Arcanine
+
+#061 Poliwhirl
+
+#079 Slowpoke
+
+#086 Seel
+
+#087 Dewgong
+
+#115 Kangaskhan
+
+#118 Goldeen
+
+#119 Seaking
+
+#134 Vaporeon
+
+#144 Articuno
+
+#147 Dratini
+
+#148 Dragonair
+
+#151 Mew
+
+#183 Marill
+
+#184 Azumarill
+
+#203 Girafarig
+
+#207 Gligar
+
+#220 Swinub
+
+#221 Piloswine
+
+#236 Tyrogue
+
+#246 Larvitar
+
+#247 Pupitar
+
+#249 Lugia
+
+#250 Ho-Oh
+
+#254 Sceptile
+
+#255 Torchic
+
+#258 Mudkip
+
+#261 Poochyena
+
+#262 Mightyena
+
+#272 Ludicolo
+
+#275 Shiftry
+
+#279 Pelipper
+
+#282 Gardevoir
+
+#286 Breloom
+
+#289 Slaking
+
+#294 Loudred
+
+#295 Exploud
+
+#296 Makuhita
+
+#297 Hariyama
+
+#299 Nosepass
+
+#120 Staryu (Duplicado resuelto) -> Reemplazado por balance de datos internos.
+
+#065 Alakazam (Ajustado) -> Reemplazado por balance de datos internos.
+
+#246 Larvitar (Ajustado) -> Reemplazado por balance de datos internos.

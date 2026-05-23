@@ -1,0 +1,27 @@
+{
+  "name": "pokefighter",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -k -p \"[{name}]\" -c \"bgBlue.bold,bgMagenta.bold\" -n \"MONGO,SRV,FRONT\" \"docker compose up -d\" \"cd backend && bun run dev\" \"cd frontend && bun run dev\"",
+    "dev:quick": "concurrently -k -p \"[{name}]\" -c \"bgBlue.bold,bgMagenta.bold\" -n \"SRV,FRONT\" \"cd backend && bun run dev\" \"cd frontend && bun run dev\"",
+    "dev:backend": "cd backend && bun run dev",
+    "dev:frontend": "cd frontend && bun run dev",
+    "db:start": "docker compose up -d mongo",
+    "db:stop": "docker compose stop mongo",
+    "db:clean": "docker compose down -v",
+    "import": "cd backend && bun run import",
+    "generate-movesets": "npm run generate-movesets --prefix backend",
+    "build": "cd backend && bun build src/index.ts --outfile dist/index.js",
+    "lint": "cd backend && bun run lint && cd frontend && bun run lint",
+    "typecheck": "cd backend && bun run typecheck && cd frontend && bun run typecheck",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "concurrently": "^8.2.2",
+    "docker-compose-cli": "^1.0.0"
+  }
+}

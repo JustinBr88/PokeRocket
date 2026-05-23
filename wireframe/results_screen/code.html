@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+        .diagonal-cut {
+            clip-path: polygon(12px 0%, 100% 0%, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0% 100%, 0% 12px);
+        }
+        .diagonal-cut-inverse {
+            clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 16px, 100% 100%, 16px 100%, 0% calc(100% - 16px));
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed-variant": "#930100",
+                      "tertiary-fixed-dim": "#ffb4a8",
+                      "on-surface": "#e4e2e1",
+                      "surface-container": "#1f2020",
+                      "surface-container-high": "#2a2a2a",
+                      "surface-tint": "#89db60",
+                      "surface-variant": "#353535",
+                      "on-error": "#690005",
+                      "surface-bright": "#393939",
+                      "on-primary": "#113800",
+                      "surface-container-lowest": "#0e0e0e",
+                      "error": "#ffb4ab",
+                      "inverse-primary": "#286c00",
+                      "on-primary-fixed": "#072100",
+                      "on-tertiary-fixed": "#410000",
+                      "primary-fixed-dim": "#89db60",
+                      "primary-container": "#78c850",
+                      "on-error-container": "#ffdad6",
+                      "on-tertiary": "#690100",
+                      "on-secondary-fixed": "#001e2d",
+                      "primary-fixed": "#a4f879",
+                      "error-container": "#93000a",
+                      "on-secondary-container": "#003c55",
+                      "outline-variant": "#41493a",
+                      "outline": "#8a9481",
+                      "on-background": "#e4e2e1",
+                      "on-secondary": "#00344b",
+                      "primary": "#93e569",
+                      "surface": "#131313",
+                      "on-secondary-fixed-variant": "#004c6b",
+                      "secondary-fixed": "#c6e7ff",
+                      "surface-dim": "#131313",
+                      "on-primary-container": "#1c5100",
+                      "background": "#131313",
+                      "surface-container-low": "#1b1c1c",
+                      "on-tertiary-container": "#920100",
+                      "on-primary-fixed-variant": "#1c5200",
+                      "on-surface-variant": "#c0cab5",
+                      "inverse-surface": "#e4e2e1",
+                      "inverse-on-surface": "#303030",
+                      "surface-container-highest": "#353535",
+                      "tertiary": "#ffc1b8",
+                      "secondary": "#82cfff",
+                      "secondary-container": "#00abec",
+                      "tertiary-fixed": "#ffdad4",
+                      "tertiary-container": "#ff9989",
+                      "secondary-fixed-dim": "#82cfff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "gutter": "16px",
+                      "margin-desktop": "32px",
+                      "margin-mobile": "12px",
+                      "border-width": "3px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Space Mono"],
+                      "headline-lg": ["Space Mono"],
+                      "body-lg": ["JetBrains Mono"],
+                      "body-md": ["JetBrains Mono"],
+                      "label-sm": ["JetBrains Mono"],
+                      "label-lg": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-1px", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                      "body-md": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                      "label-sm": ["10px", {"lineHeight": "1.0", "fontWeight": "700"}],
+                      "label-lg": ["12px", {"lineHeight": "1.0", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background min-h-screen selection:bg-primary selection:text-on-primary">
+<div class="crt-overlay"></div>
+<!-- Navigation Shell Hidden for Transactional Results Screen -->
+<main class="relative min-h-screen flex flex-col items-center justify-center p-gutter overflow-hidden bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-surface-variant via-surface-container-lowest to-black">
+<!-- Background Asset -->
+<div class="absolute inset-0 opacity-20 pointer-events-none overflow-hidden">
+<img class="w-full h-full object-cover grayscale" data-alt="A gritty, industrial dark gray background texture featuring subtle carbon fiber patterns and technical grid lines. The lighting is low-key with faint green glow from the edges, creating a high-tech atmosphere characteristic of a cyberpunk computer terminal. The overall mood is competitive and intense, fitting for a victory or defeat screen in a retro-modern tactical game." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7XPygAisch6oF87X1nSGKwtJi_bfVQC7IgjNtln13vnPyWEHm51YjHQxhoyQqGfb8dfnVe8rxs80Qtkb01BWeLEDGamJG9EItRa7FTXVsi76NdsoBoaGYkhc1y_FA6IdbHJZxyvSSGtoQprCzQiICfDzVFm1Df1XuWtima__8lFRTZREJfaxRYCASHdgQ-b2DzQMmu8UW-O552PKzTqmBqNGdjdZmJ56Uzu-9WgQVTrj6TnmMiSar76GWUC0ZAWHdVeGJVlB5UEs"/>
+</div>
+<div class="relative z-10 w-full max-w-4xl flex flex-col gap-8">
+<!-- Result Banner -->
+<div class="flex flex-col items-center text-center">
+<div class="inline-block bg-primary text-on-primary border-[4px] border-black px-12 py-4 diagonal-cut mb-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+<h1 class="font-headline-lg text-[64px] uppercase tracking-[0.2em] italic">Victory</h1>
+</div>
+<p class="font-body-lg text-primary tracking-widest uppercase">Elite League Rank Secured</p>
+</div>
+<!-- Bento Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+<!-- MVP Card -->
+<div class="md:col-span-4 bg-surface-container border-[3px] border-black p-4 flex flex-col items-center diagonal-cut bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
+<span class="font-label-lg text-primary uppercase mb-2 self-start bg-black px-2">Battle MVP</span>
+<div class="w-full aspect-square border-2 border-primary-container bg-surface-container-highest mb-4 relative overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A pixel-art style character portrait of a powerful mechanical creature with glowing neon green eyes and metallic armor plates. The subject is framed in a tight headshot against a dark technical background with digital scanlines. The aesthetic is industrial and aggressive, echoing the visual style of generation five portable battle games with sharp edges and high contrast lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFGyAgYzIdwDsujcjlmNOCU-gnIHnPCAtZJhYM4DXPuPv3KptxujgEaFdX9ZNq8P_lwy7eEQgmN4SmlZPbYn9PWjsExEQByx4GVjf-xCbMWhGzfXrvEbQ88shC13ZLZFDLq33MwvaU0eGA5CPcieDGwYzk2ORSwfWaHgU_PpRwlVVLJRkonQN3cBOYnGBdYhipz5XI96p2G6UTcT2ejF1_jUy8g1se03PVP6DdOdhN1_Ci1aXNxwv-95mUhAZGob6BMDapzXt6XCA"/>
+<div class="absolute bottom-0 right-0 bg-primary text-on-primary font-label-lg px-2 py-1">LV 88</div>
+</div>
+<div class="text-center">
+<h3 class="font-headline-md text-on-surface">Zekrom-Alpha</h3>
+<p class="font-label-sm text-on-surface-variant uppercase">3 K.O.s • 4500 DMG</p>
+</div>
+</div>
+<!-- Stats Summary -->
+<div class="md:col-span-8 grid grid-cols-2 gap-4">
+<!-- Stat Item -->
+<div class="bg-surface-container-high border-[3px] border-black p-4 flex flex-col justify-between diagonal-cut-inverse">
+<span class="font-label-sm text-on-surface-variant uppercase">Time Elapsed</span>
+<div class="flex items-end justify-between">
+<span class="font-headline-md text-primary">04:12</span>
+<span class="material-symbols-outlined text-primary" data-icon="timer">timer</span>
+</div>
+</div>
+<!-- Stat Item -->
+<div class="bg-surface-container-high border-[3px] border-black p-4 flex flex-col justify-between diagonal-cut-inverse">
+<span class="font-label-sm text-on-surface-variant uppercase">XP Gained</span>
+<div class="flex items-end justify-between">
+<span class="font-headline-md text-secondary">+1,240</span>
+<span class="material-symbols-outlined text-secondary" data-icon="bolt">bolt</span>
+</div>
+</div>
+<!-- Stat Item -->
+<div class="bg-surface-container-high border-[3px] border-black p-4 flex flex-col justify-between diagonal-cut-inverse">
+<span class="font-label-sm text-on-surface-variant uppercase">Credits Won</span>
+<div class="flex items-end justify-between">
+<span class="font-headline-md text-tertiary">₽5,000</span>
+<span class="material-symbols-outlined text-tertiary" data-icon="payments">payments</span>
+</div>
+</div>
+<!-- Stat Item -->
+<div class="bg-surface-container-high border-[3px] border-black p-4 flex flex-col justify-between diagonal-cut-inverse">
+<span class="font-label-sm text-on-surface-variant uppercase">Win Streak</span>
+<div class="flex items-end justify-between">
+<span class="font-headline-md text-primary">5 WINS</span>
+<span class="material-symbols-outlined text-primary" data-icon="military_tech">military_tech</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Progression Bar -->
+<div class="bg-surface-container border-[3px] border-black p-6 relative overflow-hidden">
+<div class="flex justify-between mb-2">
+<span class="font-label-lg uppercase">Rank Progress</span>
+<span class="font-label-lg uppercase">Pro IV → Pro V</span>
+</div>
+<div class="w-full h-4 bg-surface-container-highest border-[2px] border-black overflow-hidden flex">
+<div class="h-full bg-primary" style="width: 75%;"></div>
+<div class="h-full bg-secondary-container opacity-50" style="width: 15%;"></div>
+</div>
+<div class="mt-2 text-right">
+<span class="font-label-sm text-on-surface-variant">900 / 1200 RP TO NEXT RANK</span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col md:flex-row gap-4 mt-4">
+<button class="flex-1 bg-primary text-on-primary border-[3px] border-black py-4 font-headline-md uppercase tracking-wider diagonal-cut active:translate-y-1 transition-transform hover:bg-primary-fixed-dim">
+                    Rematch
+                </button>
+<button class="flex-1 bg-surface-container-highest text-on-surface border-[3px] border-black py-4 font-headline-md uppercase tracking-wider diagonal-cut-inverse active:translate-y-1 transition-transform hover:bg-surface-variant">
+                    Back to Lobby
+                </button>
+</div>
+</div>
+<!-- Footer Visual Hint -->
+<div class="absolute bottom-8 flex gap-8 items-center opacity-40">
+<div class="flex items-center gap-2">
+<span class="bg-surface-variant border-2 border-black w-6 h-6 flex items-center justify-center font-label-sm">A</span>
+<span class="font-label-sm uppercase">Confirm</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="bg-surface-variant border-2 border-black w-6 h-6 flex items-center justify-center font-label-sm">B</span>
+<span class="font-label-sm uppercase">Skip</span>
+</div>
+</div>
+</main>
+<!-- UI Elements Background Decorations -->
+<div class="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
+<div class="absolute top-10 left-10 w-24 h-24 border-l-[3px] border-t-[3px] border-primary-container opacity-20"></div>
+<div class="absolute bottom-10 right-10 w-24 h-24 border-r-[3px] border-b-[3px] border-primary-container opacity-20"></div>
+</div>
+</body></html>

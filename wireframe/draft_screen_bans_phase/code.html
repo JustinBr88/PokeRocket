@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+        .chamfer-br { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%); }
+        .chamfer-tl { clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px); }
+        .pixel-grid { background-image: radial-gradient(#353535 1px, transparent 1px); background-size: 8px 8px; }
+        .gloss-effect { background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 50%); }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed-variant": "#930100",
+                      "tertiary-fixed-dim": "#ffb4a8",
+                      "on-surface": "#e4e2e1",
+                      "surface-container": "#1f2020",
+                      "surface-container-high": "#2a2a2a",
+                      "surface-tint": "#89db60",
+                      "surface-variant": "#353535",
+                      "on-error": "#690005",
+                      "surface-bright": "#393939",
+                      "on-primary": "#113800",
+                      "surface-container-lowest": "#0e0e0e",
+                      "error": "#ffb4ab",
+                      "inverse-primary": "#286c00",
+                      "on-primary-fixed": "#072100",
+                      "on-tertiary-fixed": "#410000",
+                      "primary-fixed-dim": "#89db60",
+                      "primary-container": "#78c850",
+                      "on-error-container": "#ffdad6",
+                      "on-tertiary": "#690100",
+                      "on-secondary-fixed": "#001e2d",
+                      "primary-fixed": "#a4f879",
+                      "error-container": "#93000a",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary-container": "#003c55",
+                      "outline-variant": "#41493a",
+                      "outline": "#8a9481",
+                      "on-background": "#e4e2e1",
+                      "on-secondary": "#00344b",
+                      "primary": "#93e569",
+                      "surface": "#131313",
+                      "on-secondary-fixed-variant": "#004c6b",
+                      "secondary-fixed": "#c6e7ff",
+                      "surface-dim": "#131313",
+                      "on-primary-container": "#1c5100",
+                      "background": "#131313",
+                      "surface-container-low": "#1b1c1c",
+                      "on-tertiary-container": "#920100",
+                      "on-primary-fixed-variant": "#1c5200",
+                      "on-surface-variant": "#c0cab5",
+                      "inverse-surface": "#e4e2e1",
+                      "inverse-on-surface": "#303030",
+                      "surface-container-highest": "#353535",
+                      "tertiary": "#ffc1b8",
+                      "secondary": "#82cfff",
+                      "secondary-container": "#00abec",
+                      "tertiary-fixed": "#ffdad4",
+                      "tertiary-container": "#ff9989",
+                      "secondary-fixed-dim": "#82cfff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "gutter": "16px",
+                      "margin-desktop": "32px",
+                      "margin-mobile": "12px",
+                      "border-width": "3px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Space Mono"],
+                      "headline-lg": ["Space Mono"],
+                      "body-lg": ["JetBrains Mono"],
+                      "body-md": ["JetBrains Mono"],
+                      "label-sm": ["JetBrains Mono"],
+                      "label-lg": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-1px", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                      "body-md": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                      "label-sm": ["10px", {"lineHeight": "1.0", "fontWeight": "700"}],
+                      "label-lg": ["12px", {"lineHeight": "1.0", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background selection:bg-primary selection:text-on-primary overflow-hidden">
+<div class="crt-overlay"></div>
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-4 h-16 bg-surface-container-lowest border-b-[3px] border-black z-50">
+<div class="font-headline-lg text-headline-lg text-primary tracking-tighter uppercase">PokéRocket</div>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="font-headline-md text-headline-md text-primary font-bold border-b-2 border-primary pb-1 active:translate-y-0.5 transition-transform" href="#">Battle</a>
+<a class="font-headline-md text-headline-md text-on-surface-variant hover:bg-primary hover:text-on-primary active:translate-y-0.5 transition-transform" href="#">Teams</a>
+<a class="font-headline-md text-headline-md text-on-surface-variant hover:bg-primary hover:text-on-primary active:translate-y-0.5 transition-transform" href="#">Dex</a>
+</nav>
+<div class="flex items-center gap-4 text-primary">
+<span class="material-symbols-outlined" data-icon="signal_cellular_4_bar">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined" data-icon="battery_charging_full">battery_charging_full</span>
+</div>
+</header>
+<main class="h-[calc(100vh-64px)] w-full flex flex-col md:flex-row relative">
+<!-- Player 1 Zone (Left) -->
+<section class="flex-1 border-r-[4px] border-black bg-surface-container-low p-4 flex flex-col gap-4 overflow-y-auto">
+<div class="flex items-center gap-4 bg-black/40 p-3 chamfer-br border-l-[6px] border-primary-container">
+<div class="w-16 h-16 bg-surface-container-highest border-[3px] border-black relative overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A pixel-art style character portrait of a professional competitive trainer with sharp facial features and a determined expression. The lighting is high-contrast with green neon accents against a dark, industrial background. The character wears a high-tech headset and a black tactical vest, reflecting a high-stress tournament atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgNrge_K8TINfk_AtnT2nfbEBxJRPpS0KTjtj2xGC4C31kg4aPM438v3486Um9MJEg3gjOizox1ZttNf1Dhufn0hgT5136QYAIuoUCVSIc7Kkj-NhwefY-GCs5MvnhglxvMIk5pSBS2zJXWoR9w1CWIti5ztCc61O1FTdbma1PNNxoT5lreazaEttin-L1d3KxX-CyP19e0nOB02iwlX-4DYVuFr72WSXMPTq6yk40MGITKco8KXqaCUqJ1RwdO7sljwmpDwWKz1M"/>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary uppercase">TRAINER RED</h2>
+<p class="font-label-lg text-label-lg text-on-surface-variant">ELO: 2840 | REGION: KANTO</p>
+</div>
+</div>
+<div class="grid grid-cols-2 lg:grid-cols-3 gap-2">
+<!-- Pokemon Selection Item -->
+<button class="bg-surface-container-high border-[3px] border-black p-2 flex flex-col items-center hover:bg-primary hover:text-on-primary group transition-colors chamfer-br">
+<div class="w-full aspect-square bg-surface-variant border-[2px] border-black mb-2 flex items-center justify-center pixel-grid">
+<img class="w-4/5 h-4/5 object-contain" data-alt="A detailed pixel-art sprite of a powerful fire-breathing dragon Pokémon against a dark technical background. The creature is rendered with vibrant oranges and sharp highlights, standing in a combat-ready stance. The aesthetic is reminiscent of fifth-generation handheld gaming consoles with clean edges and high-contrast shading." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaLS63ueU5FF71dDoDJlP98Dj210_iJgSQapYPX7UGQETo3sKJJgxV08pYR3gvRnU59lhFZexkofn5AMzQ_GqFZ2ihSJ17LzUAUM7OXRDBPDHEQokWccm-UZReMhPBy6FvsyvXEM8NWzVXk7wrQ-HxjB6eKCo1SmAmpVLGq9kRAbrlU8xWmDTzmq-Dh5NC2DE0JJkDJvyOuSt16MkQ4ZC9BMXoPqAozTbwF0rfKRIti3eu5x1zXgF6R8LAsfym9IfRyjeVZN7yNOA"/>
+</div>
+<span class="font-label-lg text-label-lg uppercase truncate w-full text-center">Charizard</span>
+<div class="flex gap-1 mt-1">
+<span class="px-2 py-0.5 bg-[#F08030] text-[8px] font-bold text-white uppercase">Fire</span>
+<span class="px-2 py-0.5 bg-[#A890F0] text-[8px] font-bold text-white uppercase">Fly</span>
+</div>
+</button>
+<button class="bg-surface-container-high border-[3px] border-black p-2 flex flex-col items-center hover:bg-primary hover:text-on-primary group transition-colors chamfer-br">
+<div class="w-full aspect-square bg-surface-variant border-[2px] border-black mb-2 flex items-center justify-center pixel-grid">
+<img class="w-4/5 h-4/5 object-contain" data-alt="A pixelated sprite of a giant electric rodent Pokémon with a jagged tail. The character is yellow with vibrant electrical sparks surrounding it. It is set against a dark industrial dot-pattern background, maintaining a high-fidelity retro gaming style with saturated colors and sharp outlines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMzESkocw17d_QAOyX-AzylrrnZrIGqdGGSPY66FCv-Evm0g31WDh0gDGVYku8D-8k_W3HjV8rJQVcD2dSOOp39MxwqflL1jZFUZjsOjd2J6owpLXWNZ4nbhlnpIGut-n4ZRbTqQBgFgrTorEA3JF0gZfvkru_CdUn-1iaGXxGfXS6Yn-q4rtz2DIxkLN_RJeef_Owln5NP8qFDZQ4E0gnY4DKu7SqfHD0ra_c69AsF_XSKBT9VpEU97TcLmfcQ8ujmR0lkFgYWaU"/>
+</div>
+<span class="font-label-lg text-label-lg uppercase truncate w-full text-center">Pikachu</span>
+<div class="flex gap-1 mt-1">
+<span class="px-2 py-0.5 bg-[#F8D030] text-[8px] font-bold text-white uppercase">Elec</span>
+</div>
+</button>
+<!-- Repeat for diversity -->
+<button class="bg-surface-container-high border-[3px] border-black p-2 flex flex-col items-center hover:bg-primary hover:text-on-primary group transition-colors chamfer-br">
+<div class="w-full aspect-square bg-surface-variant border-[2px] border-black mb-2 flex items-center justify-center pixel-grid">
+<img class="w-4/5 h-4/5 object-contain" data-alt="A digital pixel sprite of a metallic psychic Pokémon with multiple arms. The design is industrial and cold, featuring silver and blue tones. The sprite is centered on a textured dark-gray background with scanline overlays, typical of competitive battle screens in retro-modern UI designs." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9CJCIEfykSw63zDGG8Zgt6tzlOlJkB2n0nCAMGJvqgrxrJrRmxTjQKNj9rxQtOX2jLlrUViOyEz47QlRqpknLjS5RYfljaQnhV2NrmsyaHcUzldXbz__FJi9L4gIzGnHOWjtGo3dR1tgO_THW-My01k5j6B3SnEKj28eVv5PUeaT9NUlpbCl4VkO7ZksmqDqcSFfvqmXH6-wz3o7-Wteap7zc6b-ZjMds5-LQSmsD6C4uU6njThVWqI-M-Z50bv_Qkzl4k-LnpJo"/>
+</div>
+<span class="font-label-lg text-label-lg uppercase truncate w-full text-center">Metagross</span>
+<div class="flex gap-1 mt-1">
+<span class="px-2 py-0.5 bg-[#B8B8D0] text-[8px] font-bold text-white uppercase">Steel</span>
+<span class="px-2 py-0.5 bg-[#F85888] text-[8px] font-bold text-white uppercase">Psyc</span>
+</div>
+</button>
+<button class="bg-surface-container-high border-[3px] border-black p-2 flex flex-col items-center hover:bg-primary hover:text-on-primary group transition-colors chamfer-br">
+<div class="w-full aspect-square bg-surface-variant border-[2px] border-black mb-2 flex items-center justify-center pixel-grid">
+<img class="w-4/5 h-4/5 object-contain" data-alt="A sleek pixelated dragon Pokémon sprite with deep blue and red markings. The pose is dynamic and aggressive. The image is rendered with a limited but punchy color palette, featuring sharp gradients and a heavy black outline, set against a dark-mode industrial UI background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR0JWS_BWnhm-GLb0qVUwGM8x2hXtKPvuGtrIX7pW7EcgSohy_znK2FKtcq36lH2NXxCk6oCsYynH_XrF28h2BUY93C1t5R4cgeTwiq_MMD3yUkpz6qzskFD4rs6MtvLfsqWyQ43y8-0aakY5hi7dztUzTpVn0j9GqhTGfl73P02CaW3XVrvqnik8izKv2kwKGmk6waeoZWJy_uTOjWkV1lQGCk-jjdjCRsM2k6DaejKaoY_2HAtQ1oevNpAp7_4lIlPh3RN33ZpQ"/>
+</div>
+<span class="font-label-lg text-label-lg uppercase truncate w-full text-center">Garchomp</span>
+<div class="flex gap-1 mt-1">
+<span class="px-2 py-0.5 bg-[#7038F8] text-[8px] font-bold text-white uppercase">Drag</span>
+<span class="px-2 py-0.5 bg-[#E0C068] text-[8px] font-bold text-white uppercase">Grnd</span>
+</div>
+</button>
+<button class="bg-surface-container-high border-[3px] border-black p-2 flex flex-col items-center hover:bg-primary hover:text-on-primary group transition-colors chamfer-br">
+<div class="w-full aspect-square bg-surface-variant border-[2px] border-black mb-2 flex items-center justify-center pixel-grid">
+<img class="w-4/5 h-4/5 object-contain" data-alt="A pixelated aquatic turtle Pokémon with water cannons protruding from its shell. The blue and brown tones are saturated and deep. It stands on a dark, recessed platform within a tactical interface, surrounded by digital UI elements and glowing green grid lines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArsXQobwWfQ19rbgretWeA2p8b75fYUN7NL2k-lPw58IpEo3bxuq17jJ32Yz24kCR-pQCv26ds4EZSKQKT8gV65tdqup6-M6jUuE6O7D00FfQg7BnctTZnbGD6q5-L9uYiuYjMuzxhMK9TWhUvP4xcxz4n4zuiopJaMmBk50N39xmDq9jTfUZ7EKDNebUFo8OhScBuQwOgJYJ0sBXYGfQ0j0obhIBqEC0lF5Atezi31UQ7HLDMvG45zlC-Z9PRpKaOwIUBZ1ys26Q"/>
+</div>
+<span class="font-label-lg text-label-lg uppercase truncate w-full text-center">Blastoise</span>
+<div class="flex gap-1 mt-1">
+<span class="px-2 py-0.5 bg-[#6890F0] text-[8px] font-bold text-white uppercase">Water</span>
+</div>
+</button>
+</div>
+</section>
+<!-- Central BAN ZONE -->
+<section class="w-full md:w-[420px] bg-surface-container border-x-[4px] border-black flex flex-col items-center justify-start z-10">
+<div class="w-full bg-on-tertiary-fixed-variant p-4 border-b-[4px] border-black flex flex-col items-center justify-center text-white relative overflow-hidden">
+<div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+<div class="font-label-lg text-label-lg tracking-[0.2em] mb-2 z-10">PHASE: BAN SELECTION</div>
+<div class="font-headline-lg text-[64px] leading-none mb-2 z-10 tabular-nums">00:24</div>
+<div class="w-full h-2 bg-black/50 border border-black z-10">
+<div class="h-full bg-tertiary w-3/4 shadow-[0_0_10px_#ffb4a8]"></div>
+</div>
+</div>
+<div class="p-4 w-full flex-1 overflow-y-auto">
+<div class="flex justify-between items-center mb-4 px-2">
+<div class="flex flex-col items-start">
+<span class="font-label-sm text-label-sm text-on-surface-variant">P1 BANS</span>
+<span class="font-headline-md text-headline-md text-primary">02 / 05</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-label-sm text-on-surface-variant">P2 BANS</span>
+<span class="font-headline-md text-headline-md text-tertiary">03 / 05</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<!-- Banned Item 1 -->
+<div class="relative bg-surface-container-highest border-[3px] border-on-tertiary-fixed-variant p-2 chamfer-br">
+<div class="w-full aspect-video bg-black/60 border border-black flex items-center justify-center pixel-grid grayscale opacity-50">
+<img class="w-1/2 h-full object-contain" data-alt="A grayscale pixel-art sprite of a powerful legendary Pokémon, appearing deactivated and suppressed. The image is dark and moody, with a thick red translucent 'X' overlaid across the entire card. The style is industrial-retro, emphasizing the removal of this character from play in a competitive setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfEsIxEUVCfkW_hxAA5uW95LTauAxMeEyGq05LcpXrPjHumhtrD3Wdkb-zeisymIE0OhPdKtlM9Hasryd9APQv3UdNnMVRJ2EQXi3ZLomXMfWkBMb5I4hSpjx-SzbQO5gNM8AGwWhdBgq_TqS_7LBGAaN7c1zwL7GgWpZlVz4Y2llU8THdaTh_3OoXDZRe0C2NST9Z1eo_Cp3Ro_2i4ZTRD740QY9AnPrdoHxtgRu0Wr9B2JgzwVfEV8rXfoSbwcoXeEcj3ynaAd8"/>
+</div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="text-on-tertiary-fixed-variant font-extrabold text-5xl rotate-12 drop-shadow-[0_2px_0_black]">X</div>
+</div>
+<p class="mt-1 font-label-sm text-label-sm text-center text-on-surface-variant uppercase">Mewtwo</p>
+</div>
+<!-- Banned Item 2 -->
+<div class="relative bg-surface-container-highest border-[3px] border-on-tertiary-fixed-variant p-2 chamfer-br">
+<div class="w-full aspect-video bg-black/60 border border-black flex items-center justify-center pixel-grid grayscale opacity-50">
+<img class="w-1/2 h-full object-contain" data-alt="A pixel-art sprite of a green snake-like legendary Pokémon, grayed out and marked with a massive red diagonal cross. The background is a dark metallic texture with tactical data overlays. The vibe is tense and clinical, highlighting the high stakes of a professional banning phase." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiGhVduuqtryJ7EO55YHjCTzzmrgqrOzZcwPI-9UogSqEio6TOnLdw8KDUrBNHTJUyKrhtY7mx8eEJm71kuAy-JwCJckzk65V7Ij-T3jrFYRCCJB50vVeZPqvF3eOv7ZejzibDXF-D5fjJSz7etJGfyztFTVKYfLRwAT_UXcgsJhJlAoOk3I6Ng6-yuDzzvkrS8YUtismM_bsF21MIPgQtVRGXDF_FLPR3Oo56JCtpwrfRIFf4HvY7xeYl0PCQ_VdPfx_hFc5qd38"/>
+</div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="text-on-tertiary-fixed-variant font-extrabold text-5xl -rotate-12 drop-shadow-[0_2px_0_black]">X</div>
+</div>
+<p class="mt-1 font-label-sm text-label-sm text-center text-on-surface-variant uppercase">Rayquaza</p>
+</div>
+<!-- Empty Ban Slot -->
+<div class="bg-surface-container-low border-[3px] border-dashed border-outline-variant p-2 chamfer-br flex items-center justify-center min-h-[100px]">
+<span class="material-symbols-outlined text-outline-variant text-4xl" data-icon="block">block</span>
+</div>
+<div class="bg-surface-container-low border-[3px] border-dashed border-outline-variant p-2 chamfer-br flex items-center justify-center min-h-[100px]">
+<span class="material-symbols-outlined text-outline-variant text-4xl" data-icon="block">block</span>
+</div>
+<div class="bg-surface-container-low border-[3px] border-dashed border-outline-variant p-2 chamfer-br flex items-center justify-center min-h-[100px]">
+<span class="material-symbols-outlined text-outline-variant text-4xl" data-icon="block">block</span>
+</div>
+<div class="bg-surface-container-low border-[3px] border-dashed border-outline-variant p-2 chamfer-br flex items-center justify-center min-h-[100px]">
+<span class="material-symbols-outlined text-outline-variant text-4xl" data-icon="block">block</span>
+</div>
+</div>
+<div class="mt-8">
+<button class="w-full bg-on-tertiary-fixed-variant border-[3px] border-black p-4 text-white font-headline-md text-headline-md uppercase chamfer-tl relative group">
+<div class="absolute inset-0 gloss-effect"></div>
+<span class="relative z-10 group-active:scale-95 transition-transform block">CONFIRM BAN</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Player 2 Zone (Right) -->
+<section class="flex-1 bg-surface-container-low p-4 flex flex-col gap-4 overflow-y-auto">
+<div class="flex items-center justify-end gap-4 bg-black/40 p-3 chamfer-tl border-r-[6px] border-tertiary">
+<div class="text-right">
+<h2 class="font-headline-md text-headline-md text-tertiary uppercase">TRAINER BLUE</h2>
+<p class="font-label-lg text-label-lg text-on-surface-variant">ELO: 2912 | REGION: UNOVA</p>
+</div>
+<div class="w-16 h-16 bg-surface-container-highest border-[3px] border-black relative overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A pixel-art character portrait of a rival trainer with spiky blue hair and a smug grin. The lighting is high-contrast with red neon accents against a dark, industrial background. The character wears a sleek racing-style jacket, embodying the 'urban evolution' theme of the fifth-generation aesthetics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWNWPqY3Or7err2muJNKwG6NRf2aAzlFUn53PkU71VGiKnla85f9LmFLrnAmgIdv0K9NOZOvjppCExsKa7dL4FfBfT68NmUlyD5Z645tanXiWCNkojrFIQGXP8Ahw6LDVfytFYjGbGE6J5gSEsjyf-wHuyazaJ10z61YyIu3pziSTz9aS-D-396Hxiwvcbt-iTh7eDf7ghziVSUx6FPEvzx4KCDYwRmwIEZRc4LK5wtdE7qpoqMMVNwnYliz5xr9TdhpidY7H2l2c"/>
+</div>
+</div>
+<div class="grid grid-cols-2 lg:grid-cols-3 gap-2">
+<!-- Pokemon Selection Item -->
+<button class="bg-surface-container-high border-[3px] border-black p-2 flex flex-col items-center hover:bg-tertiary hover:text-on-tertiary group transition-colors chamfer-tl">
+<div class="w-full aspect-square bg-surface-variant border-[2px] border-black mb-2 flex items-center justify-center pixel-grid">
+<img class="w-4/5 h-4/5 object-contain" data-alt="A sharp pixel-art sprite of a purple ghost Pokémon with a sinister grin and glowing red eyes. The background is a dark, gritty texture. The character is rendered with clean, high-contrast pixel work and thick black outlines, reflecting the industrial and energetic brand personality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtXIC3iYG8T3KQkpc0A4cGf9QfuIphMVrKj6fNwQd_VWfeJ2WJUS8d-5fTzW0-GkZ7uq2fXpVSnRx707NNAD7g5qdbG79v793IDxSGra7VZGhXcLtIu4i0OIn15zvv5SQlSfCwazpFYugZyq_XyhuqoM4e5zExOWALZuJwMc4pD8B4w994_Sek2P4FUVPhK578zwIue-tfrD7hOcDpLyBVYSUQbq-oBsSFPKPzAa8E15MdAyal_mhU4yNkvBqDmjwGb1X0swQV4RI"/>
+</div>
+<span class="font-label-lg text-label-lg uppercase truncate w-full text-center">Gengar</span>
+<div class="flex gap-1 mt-1">
+<span class="px-2 py-0.5 bg-[#A040A0] text-[8px] font-bold text-white uppercase">Ghos</span>
+<span class="px-2 py-0.5 bg-[#705898] text-[8px] font-bold text-white uppercase">Pois</span>
+</div>
+</button>
+<button class="bg-surface-container-high border-[3px] border-black p-2 flex flex-col items-center hover:bg-tertiary hover:text-on-tertiary group transition-colors chamfer-tl">
+<div class="w-full aspect-square bg-surface-variant border-[2px] border-black mb-2 flex items-center justify-center pixel-grid">
+<img class="w-4/5 h-4/5 object-contain" data-alt="A pixelated sprite of a giant blue-and-white sea creature Pokémon with massive wings. The colors are crisp and vibrant against a dark-mode industrial dot-pattern background. The style uses heavy mechanical borders and 2D pixel-perfect rendering to create a tactile screen feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe_35XPor8VvoonacaNf_fCbwqX7RJhLH9_UzvuD-T-z1hH1V7hyeIvzUn7HADBRjdOUm8xLfs2Yl_s75guagdK589azBwVYI5ynxO9Sqskl7H83kut9L24b13C8H0JA_ieGJBnzyzWAgo-SW2UbCwHWYi3t6DAMlIaiEBA64LgkcrCYtjfloPi660zVfU0R9OIWaBrb5Y_3oe_aPc_TdnBPwotKitkGGoqr4h37iO0MlHVtjzZBWfGNezKvdqPB7kcoj88Dz2Efo"/>
+</div>
+<span class="font-label-lg text-label-lg uppercase truncate w-full text-center">Lugia</span>
+<div class="flex gap-1 mt-1">
+<span class="px-2 py-0.5 bg-[#705898] text-[8px] font-bold text-white uppercase">Psyc</span>
+<span class="px-2 py-0.5 bg-[#A890F0] text-[8px] font-bold text-white uppercase">Fly</span>
+</div>
+</button>
+<button class="bg-surface-container-high border-[3px] border-black p-2 flex flex-col items-center hover:bg-tertiary hover:text-on-tertiary group transition-colors chamfer-tl">
+<div class="w-full aspect-square bg-surface-variant border-[2px] border-black mb-2 flex items-center justify-center pixel-grid">
+<img class="w-4/5 h-4/5 object-contain" data-alt="A pixel-art sprite of a powerful green armored dinosaur Pokémon. The armor plating is rendered with deep greens and dark shadows, standing in a menacing pose. Set against a dark industrial dot-pattern background, it perfectly mirrors the brutalist pixel art aesthetic of the UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYz7acgu2dqewjcgANHCIN1GMDODXVtaV3BB-Zf1u2AeADG9GRNzM5oq2BhjbY6RpwP3o1WHKDFlQGKzg1CSKDyHHhFjTs0EV-EDVUz9JACM1IzB0GbnqqmYDEz4DS2Jp1qlLjAe83UvLqODCbcUMcJ2-SjnNLE_AilkKrRW6CiLh2J-u5SQrHGiUR68oe7nq901dZtDqsU_4L7y83gmAwYbvKDFDfrywmrMHMs7WPSo-BFJKiiGxUOaIjiEIuG-75n6RCbly4N14"/>
+</div>
+<span class="font-label-lg text-label-lg uppercase truncate w-full text-center">Tyranitar</span>
+<div class="flex gap-1 mt-1">
+<span class="px-2 py-0.5 bg-[#705848] text-[8px] font-bold text-white uppercase">Rock</span>
+<span class="px-2 py-0.5 bg-[#705898] text-[8px] font-bold text-white uppercase">Dark</span>
+</div>
+</button>
+<button class="bg-surface-container-high border-[3px] border-black p-2 flex flex-col items-center hover:bg-tertiary hover:text-on-tertiary group transition-colors chamfer-tl">
+<div class="w-full aspect-square bg-surface-variant border-[2px] border-black mb-2 flex items-center justify-center pixel-grid">
+<img class="w-4/5 h-4/5 object-contain" data-alt="A pixelated sprite of a massive blue whale-like Pokémon with red markings on its fins. The image has high clarity and information density, with every pixel carefully placed to create a physical screen feel. The background is a dark metallic surface with light scanlines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNB7DaD21KJ03-aKSI-g2XiI1p6AuQvoGs7ZAzXFwv5rcZe0huCaWauiWj2eqp7tYvOuoiQPxoZ0P3Absa7jKZ62WV0xIYUA8oumhvI2W-sFKE0fJBoeGS1DQhXQmD3HHRqesMtN0HBYIanQqNg3HPw83EbjlEZamB6R2fgM2PrqLgRerjC6gds0F4o6c4Erbas8USx7doD8Xpr_dSx2xqhizyvdAVa8E8js7DKRaOPBrPEScOOK5AxynP2HCQVZof1DqcPZ0pOoA"/>
+</div>
+<span class="font-label-lg text-label-lg uppercase truncate w-full text-center">Kyogre</span>
+<div class="flex gap-1 mt-1">
+<span class="px-2 py-0.5 bg-[#6890F0] text-[8px] font-bold text-white uppercase">Water</span>
+</div>
+</button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 gap-2 bg-surface-container-highest border-t-[4px] border-black rounded-t-xl overflow-hidden">
+<div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.1)_0%,transparent_50%)] pointer-events-none"></div>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-container hover:text-on-primary-container active:scale-90 duration-100">
+<span class="material-symbols-outlined" data-icon="swords">swords</span>
+<span class="font-label-lg text-label-lg uppercase">Move List</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container border-[3px] border-black rounded-lg p-2 active:scale-90 duration-100">
+<span class="material-symbols-outlined" data-icon="cached">cached</span>
+<span class="font-label-lg text-label-lg uppercase">Switch</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-container hover:text-on-primary-container active:scale-90 duration-100">
+<span class="material-symbols-outlined" data-icon="local_mall">local_mall</span>
+<span class="font-label-lg text-label-lg uppercase">Bag</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-primary-container hover:text-on-primary-container active:scale-90 duration-100">
+<span class="material-symbols-outlined" data-icon="directions_run">directions_run</span>
+<span class="font-label-lg text-label-lg uppercase">Run</span>
+</button>
+</footer>
+</body></html>
