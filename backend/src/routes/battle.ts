@@ -113,8 +113,10 @@ export async function startBattle(roomCode: string) {
 // POST /api/battle/:roomCode/action
 battle.post('/:roomCode/action', async c => {
   try {
-    const { playerId, type, moveId, pokemonId } = await c.req.json();
+    const body = await c.req.json();
+    const { playerId, type, moveId, pokemonId } = body;
     const roomCode = c.req.param('roomCode');
+    console.log(`[Battle] Action received: playerId=${playerId}, type=${type}, moveId=${moveId}, pokemonId=${pokemonId}`);
     const b = await BattleModel.findOne({ roomCode });
     if (!b) {
       console.log(`[Battle] Room ${roomCode} not found`);
@@ -201,6 +203,19 @@ battle.get('/:roomCode', async c => {
   const b = await BattleModel.findOne({ roomCode: c.req.param('roomCode') }).lean();
   if (!b) return c.json({ error: 'Not found' }, 404);
   return c.json(b);
+});
+
+// GET /api/battle/history — fetch battle history for a user
+battle.get('/history/:odiserId', async c => {
+  const odiserId = c.req.param('odiserId');
+  const history = await BattleHistoryModel.find(
+    { 'players.odiserId': odiserId },
+    { roomCode: 1, 'players.name': 1, winnerUserId: 1, turnCount: 1, mode: 1, createdAt: 1 }
+  )
+    .sort({ createdAt: -1 })
+    .limit(50)
+    .lean();
+  return c.json({ history });
 });
 
 // POST /api/battle/:roomCode/reset — delete battle document for rematch

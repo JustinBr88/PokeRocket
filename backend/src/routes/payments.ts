@@ -5,6 +5,26 @@ import { stripeService } from '../services/stripeService';
 const payments = new Hono();
 const PREMIUM_PRICE = Number(process.env.PREMIUM_PRICE || 7777);
 
+// Helper: ensure user exists in DB (called on endpoints that need user)
+async function ensureUserExists(odiserId: string, username?: string, avatarUrl?: string) {
+  let user = await UserModel.findOne({ odiserId });
+  if (!user) {
+    // Auto-create user if not found (handles legacy users before webhook setup)
+    user = await UserModel.create({
+      odiserId,
+      username: username ?? odiserId,
+      avatarUrl: avatarUrl ?? null,
+      elo: 1500,
+      wins: 0,
+      losses: 0,
+      isActive: true,
+      isPremium: false,
+    });
+    console.log(`[Payments] Auto-created user: ${odiserId}`);
+  }
+  return user;
+}
+
 // POST /api/payments/intent - crear PaymentIntent
 payments.post('/intent', async (c) => {
   try {
@@ -14,12 +34,8 @@ payments.post('/intent', async (c) => {
       return c.json({ error: 'userId required' }, 400);
     }
 
-    // Verificar que el usuario existe y obtener su email de Clerk
-    // Por ahora usamos el userId como email (será mejorado con lookup de Clerk)
-    const user = await UserModel.findOne({ odiserId: userId });
-    if (!user) {
-      return c.json({ error: 'User not found' }, 404);
-    }
+    // Ensure user exists in DB (auto-creates if not found)
+    const user = await ensureUserExists(userId);
 
     if (user.isPremium) {
       return c.json({ error: 'User already has premium' }, 400);
@@ -52,6 +68,9 @@ payments.post('/confirm', async (c) => {
     if (!userId || !paymentIntentId) {
       return c.json({ error: 'userId and paymentIntentId required' }, 400);
     }
+
+    // Ensure user exists in DB
+    await ensureUserExists(userId);
 
     // Verificar estado del payment intent en Stripe
     const paymentIntent = await stripeService.confirmPaymentIntent(paymentIntentId);
@@ -101,10 +120,8 @@ payments.get('/check-premium/:userId', async (c) => {
       return c.json({ error: 'userId required' }, 400);
     }
 
-    const user = await UserModel.findOne({ odiserId: userId });
-    if (!user) {
-      return c.json({ error: 'User not found' }, 404);
-    }
+    // Auto-create user if not found (ensures new users get proper tracking)
+    const user = await ensureUserExists(userId);
 
     return c.json({
       isPremium: user.isPremium,

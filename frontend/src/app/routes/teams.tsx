@@ -20,10 +20,30 @@ export default function TeamsPage() {
   const [loading, setLoading] = useState(false);
   const [roomMode, setRoomMode] = useState<'casual' | 'ranked' | null>(null);
   const [isTeamReady, setIsTeamReady] = useState(false);
-  const [showShiny, setShowShiny] = useState(false);
+  const [showRetro, setShowRetro] = useState(false);
+  const [isPremiumChecked, setIsPremiumChecked] = useState(false);
+  const [isPremium, setIsPremium] = useState(false);
 
-  // Premium check
-  const isPremium = user && (user.publicMetadata?.isPremium === true || user.unsafeMetadata?.isPremium === true);
+  // Premium check - use backend like home.tsx does, not Clerk metadata
+  useEffect(() => {
+    if (!user) return;
+
+    const checkPremiumStatus = async () => {
+      try {
+        const response = await fetch(`${API_URL}/payments/check-premium/${user.id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setIsPremium(data.isPremium);
+        }
+      } catch (error) {
+        console.error('Error checking premium status:', error);
+      } finally {
+        setIsPremiumChecked(true);
+      }
+    };
+
+    checkPremiumStatus();
+  }, [user]);
 
   const TYPES = ['normal','fire','water','grass','electric','ice','fighting','poison','ground','flying','psychic','bug','rock','ghost','dragon','dark','steel'];
 
@@ -64,9 +84,15 @@ export default function TeamsPage() {
   // Add pokemon directly to team (no move selection - moves are automatic from famous)
   function handleAddToTeam(pokemon: PokemonAPI) {
     if (currentTeam.length >= 6) return;
-    addPokemon(pokemon.pokedexId, pokemon.name);
-    // If showing shiny and premium, enable shiny for this newly added pokemon
-    if (showShiny && isPremium) {
+
+    const result = addPokemon(pokemon.pokedexId, pokemon.name, pokemon.isLegendary);
+    if (!result.success) {
+      alert(result.reason);
+      return;
+    }
+
+    // If showing retro and premium, enable retro for this newly added pokemon
+    if (showRetro && isPremium) {
       toggleShiny(pokemon.pokedexId);
     }
     setSelectedPokemon(null);
@@ -223,22 +249,22 @@ export default function TeamsPage() {
         <div className="font-headline text-headline-lg text-primary tracking-tighter uppercase">Team Builder</div>
         {isPremium && (
           <button
-            onClick={() => setShowShiny(!showShiny)}
+            onClick={() => setShowRetro(!showRetro)}
             className={`
               flex items-center gap-2 px-4 py-2 border-3 border-black chamfer-tl font-label-lg uppercase
               transition-all hover:scale-105 active:scale-95 ml-4
-              ${showShiny
-                ? 'bg-amber-900/30 text-amber-400 border-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.5)]'
+              ${showRetro
+                ? 'bg-red-900/30 text-red-500 border-red-500 shadow-[0_0_12px_rgba(220,38,38,0.5)]'
                 : 'bg-transparent text-gray-500 border-gray-500'
               }
             `}
-            title={showShiny ? 'Desactivar Shiny' : 'Activar Shiny'}
-            aria-label={showShiny ? 'Desactivar Shiny' : 'Activar Shiny'}
+            title={showRetro ? 'Desactivar Retro' : 'Activar Retro'}
+            aria-label={showRetro ? 'Desactivar Retro' : 'Activar Retro'}
           >
             <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
               star
             </span>
-            SHINY
+            RETRO
           </button>
         )}
         <div className="flex-1" />
@@ -269,6 +295,19 @@ export default function TeamsPage() {
                 >
                   ×
                 </button>
+                {isPremium && (
+                  <button
+                    onClick={() => toggleShiny(slot.pokemonId)}
+                    className={`absolute top-1 right-1 w-6 h-6 rounded-full flex items-center justify-center transition-all ${
+                      slot.shinyEnabled
+                        ? 'bg-yellow-500 text-black'
+                        : 'bg-surface-container-lowest text-gray-500 hover:bg-yellow-500/50'
+                    }`}
+                    aria-label={slot.shinyEnabled ? 'Disable shiny' : 'Enable shiny'}
+                  >
+                    <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                  </button>
+                )}
                 <div className="w-16 h-16 bg-surface flex items-center justify-center">
                   <img
                     src={slot.shinyEnabled && isPremium ? `${API_URL}/pokemon/sprite/${slot.pokemonId}?shiny=true` : getFrontSprite(slot.pokemonName)}
@@ -380,14 +419,18 @@ export default function TeamsPage() {
                   onClick={() => handleSelectPokemon(pokemon)}
                   className={`bg-surface-container border-3 border-black p-2 hover:border-primary cursor-pointer group transition-all chamfer-tl ${
                     currentTeam.some(t => t.pokemonId === pokemon.pokedexId) ? 'border-primary bg-surface-container-high' : ''
-                  }`}
+                  } ${pokemon.isLegendary ? 'relative' : ''}`}
                 >
+                  {pokemon.isLegendary && (
+                    <div className="absolute top-1 right-1 w-6 h-6 bg-yellow-500/80 rounded-full flex items-center justify-center z-10">
+                      <span className="text-xs">★</span>
+                    </div>
+                  )}
                   <div className="flex justify-between items-start mb-1">
                     <span className="text-label-sm font-label-sm text-on-surface-variant">#{String(pokemon.pokedexId).padStart(3, '0')}</span>
-                    {pokemon.isLegendary && <span className="text-primary">★</span>}
                   </div>
                   <img
-                    src={showShiny && isPremium ? `${API_URL}/pokemon/sprite/${pokemon.pokedexId}?shiny=true` : getFrontSprite(pokemon.name)}
+                    src={showRetro && isPremium ? `${API_URL}/pokemon/sprite/${pokemon.pokedexId}?shiny=true` : getFrontSprite(pokemon.name)}
                     alt={pokemon.name}
                     className="w-full aspect-square object-contain grayscale group-hover:grayscale-0 transition-all"
                     onError={e => { (e.target as HTMLImageElement).src = pokemon.spriteUrl; }}

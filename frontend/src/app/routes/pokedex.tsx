@@ -1,19 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUser } from '@clerk/clerk-react';
 import { API_URL } from '../../lib/sprites';
 import { getFrontSprite } from '../../lib/sprites';
-import { useTeamStore } from '../../stores/teamStore';
 import type { PokemonAPI, Moveset } from '../../types';
 
 const TYPES = ['normal','fire','water','grass','electric','ice','fighting','poison','ground','flying','psychic','bug','rock','ghost','dragon','dark','steel'];
 
 export default function PokedexPage() {
-  const navigate = useNavigate();
-  const { user } = useUser();
-  const isPremium = user && (user.publicMetadata?.isPremium === true || user.unsafeMetadata?.isPremium === true);
-  const { currentTeam } = useTeamStore();
-  
   const [pokemonList, setPokemonList] = useState<PokemonAPI[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -21,7 +13,6 @@ export default function PokedexPage() {
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonAPI | null>(null);
   const [selectedMoveset, setSelectedMoveset] = useState<Moveset | null>(null);
   const [movesetLoading, setMovesetLoading] = useState(false);
-  const [shinyToggles, setShinyToggles] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     fetch(`${API_URL}/pokemon?limit=300`)
@@ -57,20 +48,6 @@ export default function PokedexPage() {
     }
   }
 
-  function toggleShinySprite(pokemonId: number) {
-    setShinyToggles(prev => ({
-      ...prev,
-      [pokemonId]: !prev[pokemonId],
-    }));
-  }
-
-  function getSelectedSpriteUrl(pokemonId: number): string {
-    if (shinyToggles[pokemonId] && isPremium) {
-      return `${API_URL}/pokemon/sprite/${pokemonId}?shiny=true`;
-    }
-    return getFrontSprite(currentTeam.find(p => p.pokemonId === pokemonId)?.pokemonName || '');
-  }
-
   const filteredPokemon = pokemonList.filter(p => {
     const matchesSearch = !searchQuery || p.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesType = !filterType || p.types.includes(filterType);
@@ -80,13 +57,7 @@ export default function PokedexPage() {
   return (
     <div className="min-h-screen bg-background font-body">
       <div className="crt-overlay" />
-      <header className="bg-surface-container-lowest border-b-3 border-black p-4 flex items-center gap-4 sticky top-0 z-50">
-        <button
-          onClick={() => navigate('/home')}
-          className="flex items-center gap-2 font-label-lg text-label-lg text-on-surface-variant hover:text-primary uppercase transition-colors"
-        >
-          <span className="material-symbols-outlined">arrow_back</span>
-        </button>
+      <header className="bg-surface-container-lowest border-b-3 border-black p-4">
         <h1 className="font-headline text-headline-lg text-primary uppercase tracking-tighter">Pokédex</h1>
       </header>
 
@@ -177,34 +148,12 @@ export default function PokedexPage() {
               {/* Sprite & Name */}
               <div className="text-center">
                 <img
-                  src={shinyToggles[selectedPokemon.pokedexId] && isPremium 
-                    ? `${API_URL}/pokemon/sprite/${selectedPokemon.pokedexId}?shiny=true` 
-                    : getFrontSprite(selectedPokemon.name)}
+                  src={getFrontSprite(selectedPokemon.name)}
                   alt={selectedPokemon.name}
-                  className="w-40 h-40 object-contain mx-auto transition-all"
+                  className="w-40 h-40 object-contain mx-auto"
                   onError={e => { (e.target as HTMLImageElement).src = selectedPokemon.spriteUrl; }}
                   style={{ imageRendering: 'pixelated' }}
                 />
-                
-                {/* Shiny Toggle Button (Premium only) */}
-                {isPremium && (
-                  <div className="mt-3 flex justify-center">
-                    <button
-                      onClick={() => toggleShinySprite(selectedPokemon.pokedexId)}
-                      className={`flex items-center gap-2 px-4 py-2 border-3 border-black font-label-lg uppercase transition-all ${
-                        shinyToggles[selectedPokemon.pokedexId]
-                          ? 'bg-tertiary-fixed text-on-tertiary-fixed'
-                          : 'bg-surface-container text-on-surface hover:bg-surface-container-high'
-                      }`}
-                    >
-                      <span className="material-symbols-outlined text-base">
-                        {shinyToggles[selectedPokemon.pokedexId] ? 'star' : 'star_outline'}
-                      </span>
-                      <span>{shinyToggles[selectedPokemon.pokedexId] ? '✨ Shiny' : '⭕ Normal'}</span>
-                    </button>
-                  </div>
-                )}
-                
                 <div className="mt-2 px-4 py-1 bg-surface-container-lowest border-2 border-black chamfer-tl inline-block">
                   <span className="font-headline text-headline-md text-primary uppercase">{selectedPokemon.name}</span>
                 </div>

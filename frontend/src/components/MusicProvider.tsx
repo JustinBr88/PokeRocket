@@ -17,9 +17,10 @@ const MUSIC_MAP: Record<string, string> = {
   '/title': 'sonidos/Music/Musica_Titulo.mp3',
   '/home': 'sonidos/Music/Musica_Home.mp3',
   '/pokedex': 'sonidos/Music/Musica_Pokedex.mp3',
-  '/rules': 'sonidos/Music/Musica_Home.mp3', // Reutilizar música de home
+  '/rules': 'sonidos/Music/Musica_Pokedex.mp3',
+  '/premium': 'sonidos/Music/Musica_Pokedex.mp3',
   '/room': 'sonidos/Music/Musica_Lobby.mp3',
-  '/play': 'sonidos/Music/Musica_Lobby.mp3',
+  '/play': 'sonidos/Music/Musica_Home.mp3',
   '/teams': 'sonidos/Music/Musica_Lobby.mp3',
   '/battle': 'sonidos/Music/Batalla_Casual.mp3', // Default casual
   '/results': 'sonidos/Music/Victoria_Casual.mp3', // Default victory
@@ -109,11 +110,15 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
     // Si estamos en /battle y tenemos música seleccionada, usarla
     if (baseRoute === '/battle' && selectedBattleMusic) {
       if (musicManager.getCurrentPath() !== `/${selectedBattleMusic}`) {
+        musicManager.stopMusic(0); // stop immediately before switching
         musicManager.playMusic(selectedBattleMusic, 300).then(() => {
           setCurrentMusic(selectedBattleMusic);
           setIsPlaying(true);
         });
       }
+    } else if (baseRoute === '/battle' && !selectedBattleMusic) {
+      // In battle but no selectedBattleMusic yet — force stop lobby music to prevent overlap
+      musicManager.stopMusic(0);
     } else if (baseRoute !== '/battle') {
       // Si salimos de batalla o no estamos en batalla, reproducir música normal
       const normalMusic = getMusicForRoute(pathname, battleMode, battleResult);

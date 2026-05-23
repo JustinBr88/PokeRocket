@@ -262,7 +262,7 @@ export default function PremiumPage() {
                 Sprites Shiny
               </h3>
               <p className="font-body text-body-md text-on-surface-variant">
-                Usa versiones brillantes de Pokémon en el Pokédex
+                Usa versiones shiny animadas de Gen 5 en el Pokédex y batallas
               </p>
             </div>
           </div>

@@ -364,23 +364,27 @@ export async function resolveTurn(roomCode: string) {
         }
       }
 
-      // Save BattleHistory
-      const battleHistory = await BattleHistoryModel.create({
-        roomCode,
-        players: battle.players.map((p: any) => ({
-          odiserId: p.odiserId,
-          name: p.name,
-          team: p.team.map((bp: any) => ({
-            pokemonId: bp.pokemonId,
-            name: bp.name,
-            pokemonRemaining: bp.currentHp > 0 ? 1 : 0,
+      // Save BattleHistory — wrapped so failures don't block battle resolution
+      try {
+        await BattleHistoryModel.create({
+          roomCode,
+          players: battle.players.map((p: any) => ({
+            odiserId: p.odiserId,
+            name: p.name,
+            team: p.team.map((bp: any) => ({
+              pokemonId: bp.pokemonId,
+              name: bp.name,
+              pokemonRemaining: bp.currentHp > 0 ? 1 : 0,
+            })),
+            totalDamageDealt: 0,
           })),
-          totalDamageDealt: 0,
-        })),
-        winnerUserId: winner,
-        turnCount: battle.turn,
-        mode: room?.mode ?? 'casual',
-      });
+          winnerUserId: winner,
+          turnCount: battle.turn,
+          mode: room?.mode ?? 'casual',
+        });
+      } catch (histErr) {
+        console.error('[BattleEngine] BattleHistory save failed (battle still resolved):', histErr);
+      }
     }
 
     battle.updatedAt = new Date();

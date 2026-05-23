@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
 import { useBattleSocket } from '../../lib/useBattleSocket';
-import { getFrontSprite, getBackSprite, hpColor } from '../../lib/sprites';
+import { getFrontSprite, getBackSprite, getFrontSpriteShiny, getBackSpriteShiny, hpColor } from '../../lib/sprites';
 import { playMoveSound } from '../../lib/movesetSounds';
 import { useMusicStore } from '../../stores/musicStore';
 import { useTeamStore } from '../../stores/teamStore';
@@ -28,6 +28,55 @@ export default function BattlePage() {
   const [displayedLog, setDisplayedLog] = useState<string[]>([]);
   const logRef = useRef<HTMLDivElement>(null);
   const [showSwitchModal, setShowSwitchModal] = useState(false);
+  const [shakeIntensity, setShakeIntensity] = useState<'none' | 'weak' | 'normal' | 'heavy'>('none');
+  const [lastAttackLogLen, setLastAttackLogLen] = useState(0);
+
+  // Classify hit strength from battle log
+  function classifyHitFromLog(log: string[]): 'weak' | 'normal' | 'heavy' {
+    const damageIdx = log.findLastIndex(l => /took \d+ damage/.test(l));
+    if (damageIdx === -1) return 'normal';
+    const damageMatch = log[damageIdx].match(/took (\d+) damage/);
+    const damage = damageMatch ? parseInt(damageMatch[1]) : 0;
+    const preceding = log.slice(0, damageIdx);
+    if (preceding.some(l => l === 'A critical hit!') || preceding.some(l => l === "It's super effective!")) return 'heavy';
+    if (damage >= 6) return 'heavy';
+    if (damage >= 4) return 'normal';
+    return 'weak';
+  }
+
+  // Get sprite filter class based on status
+  function getSpriteStatusClass(pokemon: BattlePokemon | undefined): string {
+    if (!pokemon?.status) return '';
+    switch (pokemon.status) {
+      case 'poison': case 'toxic': return 'sprite-poison';
+      case 'burn': return 'sprite-burn';
+      case 'paralysis': return 'sprite-paralysis';
+      case 'freeze': return 'sprite-freeze';
+      case 'sleep': return 'sprite-sleep';
+      default: return '';
+    }
+  }
+
+  // Render status particle overlay (infinite while status is active)
+  function renderStatusOverlay(status: string | null, isPlayer: boolean): React.ReactNode {
+    if (!status) return null;
+    const base = isPlayer ? 'player-status-overlay' : 'opponent-status-overlay';
+    switch (status) {
+      case 'poison':
+        return <div className={`overlay-poison ${base}`}><div className="status-bubble"/><div className="status-bubble"/><div className="status-bubble"/><div className="status-bubble"/></div>;
+      case 'toxic':
+        return <div className={`overlay-poison ${base}`}><div className="status-bubble"/><div className="status-bubble"/><div className="status-bubble"/><div className="status-bubble"/></div>;
+      case 'burn':
+        return <div className={`overlay-burn ${base}`}><div className="flame"/><div className="flame"/><div className="flame"/><div className="flame"/></div>;
+      case 'paralysis':
+        return <div className={`overlay-paralysis ${base}`} />;
+      case 'freeze':
+        return <div className={`overlay-freeze ${base}`}><div className="snowflake">❄</div><div className="snowflake">❄</div><div className="snowflake">❄</div><div className="snowflake">❄</div><div className="snowflake">❄</div></div>;
+      case 'sleep':
+        return <div className={`overlay-sleep ${base}`}><div className="zzz">Z</div><div className="zzz">Z</div><div className="zzz">Z</div></div>;
+      default: return null;
+    }
+  }
 
   // Load battle state from sessionStorage (set by teams.tsx) or via GET fallback
   useEffect(() => {
@@ -92,9 +141,21 @@ export default function BattlePage() {
       case 'TURN_RESOLVED': {
         console.log('[Battle] Received:', msg.type, 'turn:', msg.battle?.turn);
         setBattle(msg.battle);
-        // Parse attack animation from battle log
+
+        // Screen shake on new attack
         if (msg.type === 'TURN_RESOLVED') {
           const log = msg.battle.battleLog;
+          // Detect new attack entries (log grew beyond last recorded length)
+          if (log.length > lastAttackLogLen + 1) {
+            const hitStrength = classifyHitFromLog(log);
+            if (hitStrength !== 'weak') {
+              setShakeIntensity(hitStrength);
+              setTimeout(() => setShakeIntensity('none'), 450);
+            }
+          }
+          setLastAttackLogLen(log.length);
+
+          // Parse attack animation from battle log
           const attackLine = log[log.length - 1];
           const damageLine = log[log.length - 2];
 
@@ -159,6 +220,8 @@ export default function BattlePage() {
     if (!res.ok) {
       const err = await res.json().catch(() => ({ error: 'Unknown' }));
       console.error('[Battle] submitMove error:', res.status, err);
+      // Show error to user so they know what went wrong
+      alert(`Attack failed: ${err.error}`);
       // Re-enable on error so player can try again
       setActionSubmitted(false);
     }
@@ -167,21 +230,35 @@ export default function BattlePage() {
   async function submitSwitch(pokemonId: string) {
     if (!roomId || !playerId || actionSubmitted) return;
     setActionSubmitted(true);
-    await fetch(`${API_URL}/battle/${roomId}/action`, {
+    const res = await fetch(`${API_URL}/battle/${roomId}/action`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ playerId, type: 'switch', pokemonId }),
     });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Unknown' }));
+      console.error('[Battle] submitSwitch error:', res.status, err);
+      alert(`Switch failed: ${err.error}`);
+      setActionSubmitted(false);
+    } else {
+      setShowSwitchModal(false);
+    }
   }
 
   async function submitHeal() {
     if (!roomId || !playerId || actionSubmitted) return;
     setActionSubmitted(true);
-    await fetch(`${API_URL}/battle/${roomId}/action`, {
+    const res = await fetch(`${API_URL}/battle/${roomId}/action`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ playerId, type: 'heal' }),
     });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Unknown' }));
+      console.error('[Battle] submitHeal error:', res.status, err);
+      alert(`Heal failed: ${err.error}`);
+      setActionSubmitted(false);
+    }
   }
 
   // Reset actionSubmitted when turn changes
@@ -237,12 +314,12 @@ export default function BattlePage() {
     const teamMember = useTeamStore.getState().currentTeam.find(p => p.pokemonId === Number(pokemon.pokemonId));
     const isShinyEnabled = teamMember?.shinyEnabled ?? false;
     const isPremium = user && (user.publicMetadata?.isPremium === true || user.unsafeMetadata?.isPremium === true);
-    
+
     if (isShinyEnabled && isPremium) {
-      // Try to get shiny sprite from PokeAPI
-      return `${API_URL}/pokemon/sprite/${pokemon.pokemonId}?shiny=true`;
+      // Use Gen 5 animated shiny sprite from Showdown
+      return isPlayer ? getBackSpriteShiny(pokemon.name) : getFrontSpriteShiny(pokemon.name);
     }
-    
+
     // Use normal sprite
     return isPlayer ? getBackSprite(pokemon.name) : getFrontSprite(pokemon.name);
   };
@@ -270,60 +347,62 @@ export default function BattlePage() {
         </div>
       </header>
 
-      {/* Battle Arena */}
-      <div className="flex-grow relative bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')] bg-fixed overflow-hidden" style={{ backgroundColor: '#1a1a1a' }}>
-        <div className="absolute inset-0 bg-gradient-to-b from-[#131313] via-surface-container to-surface-container-high opacity-80" />
+{/* Battle Arena */}
+        <div className={`flex-grow relative bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')] bg-fixed overflow-hidden ${shakeIntensity !== 'none' ? `shake-${shakeIntensity}` : ''}`} style={{ backgroundColor: '#1a1a1a' }}>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#131313] via-surface-container to-surface-container-high opacity-80" />
 
-        {/* Opponent Info (Top Right) */}
-        {otherActive && (
-          <div className="absolute top-2 right-2 md:top-4 md:right-8 w-56 md:w-72 z-20">
-            <div className="bg-surface-container-highest border-3 border-black p-2 md:p-3 chamfer-tl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              <div className="flex justify-between items-end mb-1">
-                <span className="font-headline text-label-lg md:text-headline-sm text-on-surface uppercase tracking-tighter truncate">{otherActive.name}</span>
-                <span className="font-label-md text-primary">Lv. 50</span>
+          {/* Opponent Info (Top Right) */}
+          {otherActive && (
+            <div className="absolute top-2 right-2 md:top-4 md:right-8 w-56 md:w-72 z-20">
+              <div className="bg-surface-container-highest border-3 border-black p-2 md:p-3 chamfer-tl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <div className="flex justify-between items-end mb-1">
+                  <span className="font-headline text-label-lg md:text-headline-sm text-on-surface uppercase tracking-tighter truncate">{otherActive.name}</span>
+                  <span className="font-label-md text-primary">Lv. 50</span>
+                </div>
+                {/* HP Bar with CSS transition */}
+                <div className="relative h-2 md:h-3 bg-surface border-2 border-black w-full overflow-hidden rounded-sm">
+                  <div
+                    className={`absolute top-0 left-0 h-full ${hpColor(otherActive.currentHp / otherActive.maxHp)}`}
+                    style={{
+                      width: `${(otherActive.currentHp / otherActive.maxHp) * 100}%`,
+                      transition: 'width 0.6s ease-out, background-color 0.3s ease'
+                    }}
+                  />
+                </div>
+                <div className="flex justify-end mt-1">
+                  <span className="font-label-sm text-primary uppercase text-[10px] md:text-xs">
+                    {otherActive.status ? `${otherActive.status.toUpperCase()} (${otherActive.statusTurns})` : 'STATUS: NORMAL'}
+                  </span>
+                </div>
               </div>
-              {/* HP Bar with CSS transition */}
-              <div className="relative h-2 md:h-3 bg-surface border-2 border-black w-full overflow-hidden rounded-sm">
-                <div
-                  className={`absolute top-0 left-0 h-full ${hpColor(otherActive.currentHp / otherActive.maxHp)}`}
-                  style={{
-                    width: `${(otherActive.currentHp / otherActive.maxHp) * 100}%`,
-                    transition: 'width 0.6s ease-out, background-color 0.3s ease'
-                  }}
+              {/* Opponent Sprite */}
+              <div className="mt-1 md:mt-2 flex justify-end relative">
+                <img
+                  src={getActiveSpriteUrl(otherActive, false)}
+                  alt={otherActive.name}
+                  className={`w-20 h-20 md:w-32 md:h-32 drop-shadow-[0_0_10px_rgba(147,229,105,0.3)] ${getSpriteClass(otherActive.name, false)} ${getSpriteStatusClass(otherActive)}`}
+                  onError={e => { (e.target as HTMLImageElement).src = otherActive.spriteUrl; }}
+                  style={{ imageRendering: 'pixelated' }}
                 />
-              </div>
-              <div className="flex justify-end mt-1">
-                <span className="font-label-sm text-primary uppercase text-[10px] md:text-xs">
-                  {otherActive.status ? `${otherActive.status.toUpperCase()} (${otherActive.statusTurns})` : 'STATUS: NORMAL'}
-                </span>
+                {renderStatusOverlay(otherActive.status, false)}
               </div>
             </div>
-            {/* Opponent Sprite */}
-            <div className="mt-1 md:mt-2 flex justify-end">
-              <img
-                src={getActiveSpriteUrl(otherActive, false)}
-                alt={otherActive.name}
-                className={`w-20 h-20 md:w-32 md:h-32 drop-shadow-[0_0_10px_rgba(147,229,105,0.3)] ${getSpriteClass(otherActive.name, false)}`}
-                onError={e => { (e.target as HTMLImageElement).src = otherActive.spriteUrl; }}
-                style={{ imageRendering: 'pixelated' }}
-              />
-            </div>
-          </div>
-        )}
+          )}
 
-        {/* Player Info (Bottom Left) */}
-        {myActive && (
-          <div className="absolute bottom-2 left-2 md:bottom-4 md:left-8 w-56 md:w-72 z-20">
-            {/* Player Sprite Back */}
-            <div className="mb-1 md:mb-2 flex justify-start">
-              <img
-                src={getActiveSpriteUrl(myActive, true)}
-                alt={myActive.name}
-                className={`w-20 h-20 md:w-36 md:h-36 drop-shadow-[0_0_10px_rgba(147,229,105,0.2)] ${getSpriteClass(myActive.name, true)}`}
-                onError={e => { (e.target as HTMLImageElement).src = myActive.spriteUrl; }}
-                style={{ imageRendering: 'pixelated' }}
-              />
-            </div>
+          {/* Player Info (Bottom Left) */}
+          {myActive && (
+            <div className="absolute bottom-2 left-2 md:bottom-4 md:left-8 w-56 md:w-72 z-20">
+              {/* Player Sprite Back */}
+              <div className="mb-1 md:mb-2 flex justify-start relative">
+                <img
+                  src={getActiveSpriteUrl(myActive, true)}
+                  alt={myActive.name}
+                  className={`w-20 h-20 md:w-36 md:h-36 drop-shadow-[0_0_10px_rgba(147,229,105,0.2)] ${getSpriteClass(myActive.name, true)} ${getSpriteStatusClass(myActive)}`}
+                  onError={e => { (e.target as HTMLImageElement).src = myActive.spriteUrl; }}
+                  style={{ imageRendering: 'pixelated' }}
+                />
+                {renderStatusOverlay(myActive.status, true)}
+              </div>
             <div className="bg-surface-container-highest border-3 border-black p-2 md:p-3 chamfer-br shadow-[-4px_4px_0px_0px_rgba(0,0,0,1)]">
               <div className="flex justify-between items-end mb-1">
                 <span className="font-headline text-label-lg md:text-headline-sm text-on-surface uppercase tracking-tighter truncate">{myActive.name}</span>
@@ -491,13 +570,21 @@ export default function BattlePage() {
 
                       {/* Sprite */}
                       <div className="w-full aspect-square flex items-center justify-center">
-                        <img
-                          src={getFrontSprite(p.name)}
-                          alt={p.name}
-                          className="w-16 h-16 object-contain"
-                          style={{ imageRendering: 'pixelated' }}
-                          onError={e => { (e.target as HTMLImageElement).src = p.spriteUrl; }}
-                        />
+                        {(() => {
+                          const teamMember = useTeamStore.getState().currentTeam.find(tm => tm.pokemonId === Number(p.pokemonId));
+                          const isShinyEnabled = teamMember?.shinyEnabled ?? false;
+                          const isPremium = user && (user.publicMetadata?.isPremium === true || user.unsafeMetadata?.isPremium === true);
+                          const spriteSrc = (isShinyEnabled && isPremium) ? getFrontSpriteShiny(p.name) : getFrontSprite(p.name);
+                          return (
+                            <img
+                              src={spriteSrc}
+                              alt={p.name}
+                              className="w-16 h-16 object-contain"
+                              style={{ imageRendering: 'pixelated' }}
+                              onError={e => { (e.target as HTMLImageElement).src = p.spriteUrl; }}
+                            />
+                          );
+                        })()}
                       </div>
 
                       {/* Name */}

@@ -118,20 +118,30 @@ body {
 }
 .anim-attack { animation: attack-lunge 0.4s ease-in-out; }
 
+/* Damage flash + sprite shake combo */
 @keyframes damage-flash {
   0%, 100% { filter: none; }
   25%       { filter: brightness(3) saturate(0); }
   50%       { filter: none; }
   75%       { filter: brightness(3) saturate(0); }
 }
-.anim-damage { animation: damage-flash 0.5s ease; }
-
-@keyframes faint {
-  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(60px) rotate(15deg); opacity: 0; }
+@keyframes sprite-shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
 }
-.anim-faint { animation: faint 0.6s ease-in forwards; }
+.anim-damage { animation: sprite-shake 0.4s ease, damage-flash 0.5s ease; }
 
+/* Faint slide down (no rotate) */
+@keyframes faint-slide {
+  0%   { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(80px); opacity: 0; }
+}
+.anim-faint { animation: faint-slide 0.7s ease-in forwards; }
+
+/* Enter animations */
 @keyframes slide-in-left {
   from { transform: translateX(-120px); opacity: 0; }
   to   { transform: translateX(0);      opacity: 1; }
@@ -142,6 +152,137 @@ body {
 }
 .anim-enter-player   { animation: slide-in-left  0.35s ease-out; }
 .anim-enter-opponent { animation: slide-in-right 0.35s ease-out; }
+
+/* ── Screen Shake by Intensity ─────────────────────── */
+@keyframes shake-weak {
+  0%, 100% { transform: translate(0, 0); }
+  25%       { transform: translate(-2px, -1px); }
+  50%       { transform: translate(2px, 1px); }
+  75%       { transform: translate(-1px, 1px); }
+}
+@keyframes shake-normal {
+  0%, 100% { transform: translate(0, 0); }
+  20%       { transform: translate(-3px, -2px); }
+  40%       { transform: translate(3px, 2px); }
+  60%       { transform: translate(-2px, 2px); }
+  80%       { transform: translate(2px, -1px); }
+}
+@keyframes shake-heavy {
+  0%, 100% { transform: translate(0, 0); }
+  10%       { transform: translate(-5px, -3px); }
+  20%       { transform: translate(5px, 3px); }
+  30%       { transform: translate(-4px, 2px); }
+  40%       { transform: translate(4px, -2px); }
+  50%       { transform: translate(-3px, 3px); }
+  60%       { transform: translate(3px, -3px); }
+  70%       { transform: translate(-2px, 2px); }
+  80%       { transform: translate(2px, -1px); }
+  90%       { transform: translate(-1px, 1px); }
+}
+.shake-weak   { animation: shake-weak   0.35s ease; }
+.shake-normal { animation: shake-normal 0.4s  ease; }
+.shake-heavy  { animation: shake-heavy  0.45s ease; }
+
+/* ── Status Sprite Filters ──────────────────────────── */
+.sprite-poison    { filter: sepia(0.5) hue-rotate(280deg) saturate(2); }
+.sprite-burn      { filter: sepia(0.4) hue-rotate(-20deg) saturate(1.8) brightness(1.1); }
+.sprite-paralysis { filter: sepia(0.2) hue-rotate(40deg) brightness(1.15) saturate(1.3); }
+.sprite-freeze    { filter: sepia(0.3) hue-rotate(170deg) brightness(1.1) saturate(1.2); }
+.sprite-sleep     { filter: brightness(0.8) blur(0.5px); }
+.sprite-critical  { filter: brightness(2) contrast(1.3); }
+
+/* ── Status Overlay Containers ──────────────────────── */
+.opponent-status-overlay,
+.player-status-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+
+/* ── Poison/Toxic Bubbles ───────────────────────────── */
+@keyframes bubble-rise {
+  0%   { transform: translateY(0) scale(0.4); opacity: 0.85; }
+  50%  { opacity: 0.6; }
+  100% { transform: translateY(-50px) scale(0.8); opacity: 0; }
+}
+.overlay-poison .status-bubble {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle at 30% 30%, #c77dff, #7b2d8b);
+  border-radius: 50%;
+  top: 50%;
+}
+.overlay-poison .status-bubble:nth-child(1) { left: 20%; animation: bubble-rise 1.2s ease-out infinite 0s; }
+.overlay-poison .status-bubble:nth-child(2) { left: 45%; animation: bubble-rise 1.2s ease-out infinite 0.4s; }
+.overlay-poison .status-bubble:nth-child(3) { left: 70%; animation: bubble-rise 1.2s ease-out infinite 0.8s; }
+.overlay-poison .status-bubble:nth-child(4) { left: 85%; animation: bubble-rise 1.2s ease-out infinite 0.2s; }
+
+/* ── Burn Flames ─────────────────────────────────────── */
+@keyframes flame-flicker {
+  0%   { transform: scaleY(0.8) scaleX(1); opacity: 0.7; }
+  50%  { transform: scaleY(1.2) scaleX(0.9); opacity: 1; }
+  100% { transform: scaleY(0.9) scaleX(1.1); opacity: 0.6; }
+}
+.overlay-burn .flame {
+  position: absolute;
+  bottom: -5px;
+  width: 12px;
+  height: 20px;
+  background: linear-gradient(to top, #e67e22, #f39c12, #fff);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+}
+.overlay-burn .flame:nth-child(1) { left: 15%; animation: flame-flicker 0.4s ease-in-out infinite 0s; }
+.overlay-burn .flame:nth-child(2) { left: 40%; animation: flame-flicker 0.4s ease-in-out infinite 0.15s; }
+.overlay-burn .flame:nth-child(3) { left: 65%; animation: flame-flicker 0.4s ease-in-out infinite 0.25s; }
+.overlay-burn .flame:nth-child(4) { left: 85%; animation: flame-flicker 0.4s ease-in-out infinite 0.1s; }
+
+/* ── Paralysis Electricity (intermittent) ──────────── */
+@keyframes spark-flash {
+  0%, 90%, 100% { opacity: 0; }
+  20%, 25%, 70%, 75% { opacity: 1; }
+}
+.overlay-paralysis {
+  animation: spark-flash 1.5s ease-in-out infinite;
+  background: radial-gradient(ellipse at center, rgba(241,196,15,0.15) 0%, transparent 70%);
+}
+
+/* ── Freeze Snowflakes ───────────────────────────────── */
+@keyframes snow-fall {
+  0%   { transform: translateY(-10px) rotate(0deg); opacity: 0; }
+  20%  { opacity: 0.8; }
+  100% { transform: translateY(40px) rotate(360deg); opacity: 0; }
+}
+.overlay-freeze .snowflake {
+  position: absolute;
+  color: #a8d5f5;
+  top: 0;
+}
+.overlay-freeze .snowflake:nth-child(1) { left: 10%; animation: snow-fall 1.5s linear infinite 0s; font-size: 10px; }
+.overlay-freeze .snowflake:nth-child(2) { left: 30%; animation: snow-fall 1.5s linear infinite 0.5s; font-size: 14px; }
+.overlay-freeze .snowflake:nth-child(3) { left: 50%; animation: snow-fall 1.5s linear infinite 1s; font-size: 8px; }
+.overlay-freeze .snowflake:nth-child(4) { left: 75%; animation: snow-fall 1.5s linear infinite 0.3s; font-size: 11px; }
+.overlay-freeze .snowflake:nth-child(5) { left: 90%; animation: snow-fall 1.5s linear infinite 0.8s; font-size: 13px; }
+
+/* ── Sleep Zzz ───────────────────────────────────────── */
+@keyframes zzz-float {
+  0%   { transform: translate(0, 0) scale(0.5); opacity: 0; }
+  30%  { transform: translate(8px, -12px) scale(1); opacity: 1; }
+  70%  { transform: translate(16px, -25px) scale(0.9); opacity: 0.8; }
+  100% { transform: translate(22px, -40px) scale(0.5); opacity: 0; }
+}
+.overlay-sleep .zzz {
+  position: absolute;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: bold;
+  color: #5dade2;
+  top: 20%;
+}
+.overlay-sleep .zzz:nth-child(1) { font-size: 12px; animation: zzz-float 1.8s ease-out infinite 0s; left: 30%; }
+.overlay-sleep .zzz:nth-child(2) { font-size: 16px; animation: zzz-float 1.8s ease-out infinite 0.6s; left: 50%; }
+.overlay-sleep .zzz:nth-child(3) { font-size: 20px; animation: zzz-float 1.8s ease-out infinite 1.2s; left: 65%; }
 
 /* ── Pokeball Spinner (Lobby) ─────────────────────── */
 @keyframes pokeball-spin {

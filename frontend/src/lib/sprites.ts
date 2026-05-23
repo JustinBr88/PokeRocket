@@ -19,6 +19,14 @@ export function getBackSprite(name: string): string {
   return `https://play.pokemonshowdown.com/sprites/ani-back/${toShowdownName(name)}.gif`;
 }
 
+export function getFrontSpriteShiny(name: string): string {
+  return `https://play.pokemonshowdown.com/sprites/ani-shiny/${toShowdownName(name)}.gif`;
+}
+
+export function getBackSpriteShiny(name: string): string {
+  return `https://play.pokemonshowdown.com/sprites/ani-back-shiny/${toShowdownName(name)}.gif`;
+}
+
 export function getIconSprite(name: string): string {
   return `https://play.pokemonshowdown.com/sprites/pokemonicons-sheet.png`;
 }

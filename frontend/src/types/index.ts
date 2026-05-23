@@ -2,18 +2,7 @@ export type WsMessage =
   | { type: 'PLAYER_CONNECTED'; playerId: string; roomCode: string }
   | { type: 'PLAYER_DISCONNECTED'; playerId: string; roomCode: string }
   | { type: 'LOBBY_READY'; players: { playerId: string; name: string }[] }
-  | { type: 'TEAM_READY'; odiserId: string; roomCode: string }
-  | { type: 'BOTH_TEAMS_READY'; roomCode: string }
-  | { type: 'TEAM_CANCELLED'; odiserId: string; roomCode: string }
-  | {
-      type: 'BATTLE_STARTED';
-      battle: BattleState;
-      premiumInfo?: {
-        player1HasPremium: boolean;
-        player2HasPremium: boolean;
-      };
-      selectedBattleMusic?: string;
-    }
+  | { type: 'BATTLE_STARTED'; battle: BattleState }
   | { type: 'TURN_RESOLVED'; battle: BattleState }
   | { type: 'BATTLE_ENDED'; winnerUserId: string }
   | { type: 'ERROR'; message: string }
